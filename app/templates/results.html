@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Analysis Results | Resume Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Resume Analysis Results</h1>
+            <div class="header-actions">
+                <a href="/edit-resume/{{ filename }}" class="btn-primary"><i class='bx bx-edit'></i> Edit Resume</a>
+                <a href="/" class="btn-secondary"><i class='bx bx-left-arrow-alt'></i> Analyze Another Resume</a>
+            </div>
+        </header>
+
+        <main>
+            <div class="results-container">
+                {% if results.match_percentage > 0 %}
+                <section class="match-section">
+                    <h2>Job Match Score</h2>
+                    <div class="score-card">
+                        <div class="score-details">
+                            <div class="score-title">Match Percentage</div>
+                            <div class="score-value">{{ results.match_percentage }}%</div>
+                        </div>
+                        <div class="score-container">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: {{ results.match_percentage }}%"></div>
+                            </div>
+                        </div>
+                        <div class="score-message">
+                            {% if results.match_percentage >= 80 %}
+                            <div class="score-great"><i class='bx bxs-check-circle'></i> Excellent match! Your resume aligns well with this job.</div>
+                            {% elif results.match_percentage >= 60 %}
+                            <div class="score-good"><i class='bx bxs-check-circle'></i> Good match! Consider addressing the missing skills.</div>
+                            {% elif results.match_percentage >= 40 %}
+                            <div class="score-average"><i class='bx bxs-info-circle'></i> Average match. Try to incorporate more relevant skills.</div>
+                            {% else %}
+                            <div class="score-poor"><i class='bx bxs-error'></i> Low match. Your resume needs significant updates for this role.</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </section>
+                {% endif %}
+
+                <section class="skills-section">
+                    <h2><i class='bx bx-check-circle'></i> Skills Detected in Your Resume</h2>
+                    <p class="section-description">These are the key technical skills identified in your resume:</p>
+                    <div class="skills-container">
+                        {% if results.skills %} {% for skill in results.skills %}
+                        <span class="skill-tag"><i class='bx bx-check'></i> {{ skill }}</span> {% endfor %} {% else %}
+                        <p class="no-data">No specific skills detected. Consider adding more technical keywords to your resume.</p>
+                        {% endif %}
+                    </div>
+                </section>
+
+                {% if results.missing_skills %}
+                <section class="missing-skills-section">
+                    <h2><i class='bx bx-plus-circle'></i> Key Skills Missing From Your Resume</h2>
+                    <p class="section-description">These skills were found in the job description but not in your resume:</p>
+                    <div class="skills-container">
+                        {% for skill in results.missing_skills %}
+                        <span class="skill-tag missing"><i class='bx bx-plus'></i> {{ skill }}</span> {% endfor %}
+                    </div>
+                    <p class="tip"><i class='bx bx-bulb'></i> Consider adding these skills to your resume if you have experience with them.</p>
+                </section>
+                {% endif %} {% if job_description and results.improvement_suggestions %}
+                <section class="improvement-section">
+                    <h2><i class='bx bx-edit'></i> Resume Improvement Suggestions</h2>
+                    <p class="section-description">Recommendations to make your resume more effective for this role:</p>
+                    <div class="improvement-container">
+                        {% for suggestion in results.improvement_suggestions %}
+                        <div class="suggestion-card">
+                            <h3>
+                                {% if suggestion.type == "skills" %}
+                                <i class='bx bx-list-plus'></i> {% elif suggestion.type == "examples" %}
+                                <i class='bx bx-detail'></i> {% elif suggestion.type == "quantify" %}
+                                <i class='bx bx-bar-chart-alt-2'></i> {% elif suggestion.type == "format" %}
+                                <i class='bx bx-layout'></i> {% else %}
+                                <i class='bx bx-bulb'></i> {% endif %} {{ suggestion.title }}
+                            </h3>
+                            <p>{{ suggestion.description }}</p>
+                            <ul>
+                                {% for item in suggestion.suggestion_list %}
+                                <li>{{ item }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </section>
+                {% endif %}
+
+                <section class="text-section">
+                    <h2>Resume Text</h2>
+                    <div class="text-container">
+                        <pre>{{ resume_text }}</pre>
+                    </div>
+                </section>
+
+                {% if job_description %}
+                <section class="text-section">
+                    <h2>Job Description</h2>
+                    <div class="text-container">
+                        <pre>{{ job_description }}</pre>
+                    </div>
+                </section>
+                {% endif %}
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Resume Analyzer | AI-Powered Resume Analysis Tool</p>
+        </footer>
+    </div>
+
+    <style>
+        .score-card {
+            background-color: #f8fafc;
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .score-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .score-title {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .score-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .score-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: var(--radius);
+            font-size: 0.95rem;
+        }
+        
+        .score-great {
+            color: #10b981;
+        }
+        
+        .score-good {
+            color: #3b82f6;
+        }
+        
+        .score-average {
+            color: #f59e0b;
+        }
+        
+        .score-poor {
+            color: #ef4444;
+        }
+        
+        .section-description {
+            color: var(--text-light);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+        
+        .no-data {
+            color: var(--text-light);
+            font-style: italic;
+        }
+        
+        .improvement-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .suggestion-card {
+            background-color: #f8fafc;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+        
+        .suggestion-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .suggestion-card h3 {
+            color: var(--primary-color);
+            font-size: 18px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .suggestion-card p {
+            color: var(--text-light);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+        
+        .suggestion-card ul {
+            padding-left: 25px;
+        }
+        
+        .suggestion-card li {
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+    </style>
+</body>
+
+</html>

@@ -1,0 +1,217 @@
+/* Global Styles */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f7f9;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+header h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+
+/* Form Styles */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+input[type="file"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+    min-height: 150px;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.btn-secondary {
+    display: inline-block;
+    background-color: #7f8c8d;
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: #95a5a6;
+}
+
+
+/* Results Styles */
+
+.results-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+section h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+
+/* Progress Bar Styles */
+
+.score-container {
+    display: flex;
+    align-items: center;
+}
+
+.progress-bar {
+    flex-grow: 1;
+    height: 30px;
+    background-color: #ecf0f1;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-right: 15px;
+}
+
+.progress {
+    height: 100%;
+    background-color: #27ae60;
+    border-radius: 15px;
+    transition: width 0.5s ease-in-out;
+}
+
+.percentage {
+    font-size: 20px;
+    font-weight: bold;
+    color: #27ae60;
+}
+
+
+/* Skills Styles */
+
+.skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.skill-tag {
+    background-color: #3498db;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 30px;
+    font-size: 14px;
+}
+
+.skill-tag.missing {
+    background-color: #e74c3c;
+}
+
+.tip {
+    margin-top: 15px;
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+
+/* Entities Table Styles */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th,
+table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+
+/* Text Container Styles */
+
+.text-container {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 4px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.text-container pre {
+    white-space: pre-wrap;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+}
+
+
+/* Footer Styles */
+
+footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    color: #7f8c8d;
+}

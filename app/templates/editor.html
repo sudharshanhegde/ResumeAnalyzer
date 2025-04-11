@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Editor | Resume Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Resume Editor</h1>
+            <a href="/" class="btn-secondary"><i class='bx bx-left-arrow-alt'></i> Back to Home</a>
+        </header>
+
+        <main>
+            <div class="editor-container">
+                <div class="toolbar">
+                    <button id="saveButton" class="btn-primary"><i class='bx bx-save'></i> Save Changes</button>
+                    <button id="downloadButton" class="btn-secondary"><i class='bx bx-download'></i> Download Markdown</button>
+                    <div class="status-message" id="statusMessage"></div>
+                </div>
+
+                <div class="editor-wrapper">
+                    <div class="editor-header">
+                        <h2>Edit Your Resume</h2>
+                        <p class="editor-instructions">Write your resume in Markdown format. Use the toolbar above the editor for formatting help.</p>
+                    </div>
+                    <textarea id="resumeEditor">{{ resume_text }}</textarea>
+                </div>
+
+                <div class="editor-footer">
+                    <div class="tips">
+                        <h3><i class='bx bx-bulb'></i> Markdown Tips</h3>
+                        <ul>
+                            <li>Use # for headings (e.g., # Your Name, ## Experience)</li>
+                            <li>Use * or - for bullet points</li>
+                            <li>Use **text** for bold and *text* for italic</li>
+                            <li>Use --- for horizontal lines between sections</li>
+                            <li>Use > for blockquotes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Resume Analyzer | AI-Powered Resume Analysis Tool</p>
+        </footer>
+    </div>
+
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <p>Processing your resume...</p>
+    </div>
+
+    <script>
+        // Initialize EasyMDE
+        const easyMDE = new EasyMDE({
+            element: document.getElementById('resumeEditor'),
+            spellChecker: false,
+            status: false,
+            toolbar: [
+                'bold', 'italic', 'heading', '|',
+                'quote', 'unordered-list', 'ordered-list', '|',
+                'link', 'horizontal-rule', '|',
+                'preview', 'side-by-side', 'fullscreen', '|',
+                'guide'
+            ]
+        });
+
+        // Save button functionality
+        document.getElementById('saveButton').addEventListener('click', function() {
+            const resumeText = easyMDE.value();
+            const statusMessage = document.getElementById('statusMessage');
+
+            fetch('/save-resume', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        resume_text: resumeText
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        statusMessage.textContent = 'Resume saved successfully!';
+                        statusMessage.className = 'status-message success';
+                    } else {
+                        statusMessage.textContent = 'Error saving resume: ' + data.error;
+                        statusMessage.className = 'status-message error';
+                    }
+                })
+                .catch(error => {
+                    statusMessage.textContent = 'Error saving resume: ' + error;
+                    statusMessage.className = 'status-message error';
+                });
+        });
+
+        // Download button functionality
+        document.getElementById('downloadButton').addEventListener('click', function() {
+            const resumeText = easyMDE.value();
+            const blob = new Blob([resumeText], {
+                type: 'text/markdown'
+            });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'resume.md';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        });
+    </script>
+</body>
+
+</html>
