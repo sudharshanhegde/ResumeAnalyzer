@@ -6,57 +6,131 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resume Analyzer | AI-Powered Resume Analysis</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css">
 </head>
 
 <body>
     <div class="container">
         <header>
             <h1>Resume Analyzer</h1>
-            <p>Upload your resume and compare it with job descriptions to identify skill gaps and improve your application success rate</p>
+            <p>Upload your resume and compare it with job descriptions using advanced AI and NLP techniques to identify skill gaps and improve your application success rate</p>
         </header>
 
         <main>
             <div class="card">
-                <form action="/analyze" method="post" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label for="resume">📄 Upload Your Resume (PDF)</label>
-                        <input type="file" id="resume" name="resume" accept=".pdf" required>
-                    </div>
+                <div class="form-container">
+                    <form action="/analyze" method="post" enctype="multipart/form-data">
+                        <div class="form-section">
+                            <div class="form-group">
+                                <label for="resume">
+                                    <i class='bx bx-file-blank'></i>
+                                    Upload Your Resume (PDF)
+                                </label>
+                                <input type="file" id="resume" name="resume" accept=".pdf" required>
+                                <small style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem; display: block;">
+                                    Supported format: PDF | Maximum size: 10MB
+                                </small>
+                            </div>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="job_description">📋 Job Description (Optional)</label>
-                        <textarea id="job_description" name="job_description" rows="10" placeholder="Paste the job description here to compare with your resume and find skill gaps..."></textarea>
-                    </div>
+                        <div class="form-section">
+                            <div class="form-group">
+                                <label for="job_description">
+                                    <i class='bx bx-clipboard'></i>
+                                    Job Description (Optional)
+                                </label>
+                                <textarea id="job_description" name="job_description" rows="8" 
+                                    placeholder="Paste the job description here to compare with your resume and find skill gaps...&#10;&#10;This will enable advanced features like:&#10;• Semantic similarity analysis&#10;• Skill gap identification&#10;• Match percentage calculation&#10;• Targeted improvement suggestions"></textarea>
+                            </div>
+                        </div>
 
-                    <div class="form-group">
-                        <button type="submit" class="btn-primary">Analyze My Resume</button>
-                    </div>
-                </form>
+                        <div class="form-group">
+                            <button type="submit" class="btn-primary">
+                                <i class='bx bx-search-alt-2'></i>
+                                Analyze My Resume
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             <div class="card">
-                <h2>How It Works</h2>
-                <div class="steps">
+                <h2>
+                    <i class='bx bx-brain'></i>
+                    Advanced AI Analysis
+                </h2>
+                <div class="features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class='bx bx-analyse' style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                        </div>
+                        <h3 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.125rem;">Entity Recognition</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.6;">Advanced NLP identifies organizations, locations, dates, and key information from your resume</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class='bx bx-brain' style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                        </div>
+                        <h3 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.125rem;">Semantic Analysis</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.6;">AI-powered semantic similarity matching between your resume and job descriptions</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class='bx bx-heart' style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                        </div>
+                        <h3 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.125rem;">Sentiment Analysis</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.6;">Analyzes the tone and confidence level of your resume content</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class='bx bx-book-reader' style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                        </div>
+                        <h3 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.125rem;">Readability Score</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.6;">Evaluates resume clarity and professional writing quality using multiple metrics</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class='bx bx-category' style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                        </div>
+                        <h3 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.125rem;">Skill Categorization</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.6;">Automatically categorizes skills into technical, soft, and domain-specific groups</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class='bx bx-target-lock' style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                        </div>
+                        <h3 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.125rem;">Smart Recommendations</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.6;">Provides intelligent, priority-based suggestions for resume improvement</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>
+                    <i class='bx bx-help-circle'></i>
+                    How It Works
+                </h2>
+                <div class="steps" style="margin-top: 2rem;">
                     <div class="step">
                         <div class="step-number">1</div>
                         <div class="step-content">
                             <h3>Upload Your Resume</h3>
-                            <p>Upload your resume in PDF format for analysis</p>
+                            <p>Upload your resume in PDF format for comprehensive AI analysis</p>
                         </div>
                     </div>
                     <div class="step">
                         <div class="step-number">2</div>
                         <div class="step-content">
-                            <h3>Paste Job Description</h3>
-                            <p>Optionally paste a job description to compare with your resume</p>
+                            <h3>Add Job Description</h3>
+                            <p>Optionally paste a job description to enable advanced matching and gap analysis</p>
                         </div>
                     </div>
                     <div class="step">
                         <div class="step-number">3</div>
                         <div class="step-content">
-                            <h3>Get Detailed Analysis</h3>
-                            <p>Receive insights on skills, missing keywords, and match percentage</p>
+                            <h3>Get AI-Powered Insights</h3>
+                            <p>Receive detailed analysis including skill gaps, match percentage, sentiment analysis, and improvement recommendations</p>
                         </div>
                     </div>
                 </div>
@@ -70,36 +144,75 @@
 
     <style>
         .steps {
-            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
         
         .step {
             display: flex;
-            margin-bottom: 25px;
             align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+        }
+        
+        .step:hover {
+            background: var(--bg-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
         
         .step-number {
-            background: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
             color: white;
-            width: 40px;
-            height: 40px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            font-weight: 700;
+            font-size: 1.125rem;
             flex-shrink: 0;
-            margin-right: 15px;
+            box-shadow: var(--shadow-sm);
         }
         
         .step-content h3 {
-            margin-bottom: 5px;
-            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-size: 1.125rem;
+            font-weight: 600;
         }
         
         .step-content p {
-            color: var(--text-light);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+        
+        .feature-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+        }
+        
+        .feature-item:hover {
+            background: var(--bg-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr !important;
+            }
         }
     </style>
 </body>
