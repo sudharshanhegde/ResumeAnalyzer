@@ -25,6 +25,7 @@ resume-analyzer/
 ## 🚀 Development Setup
 
 ### 1. Clone and Setup
+
 ```bash
 git clone https://github.com/sudharshanhegde/ResumeAnalyzer.git
 cd ResumeAnalyzer
@@ -32,6 +33,7 @@ setup_clean_nlp.bat
 ```
 
 ### 2. Development Environment
+
 ```bash
 # Activate virtual environment
 nlp_resume_env\Scripts\activate.bat
@@ -44,6 +46,7 @@ python diagnose_nlp.py
 ```
 
 ### 3. Start Development Server
+
 ```bash
 # Easy method
 quick_start.bat
@@ -55,12 +58,14 @@ python app.py
 ## 🔧 Development Guidelines
 
 ### Code Organization
+
 - **app.py**: Main Flask application with NLP functions
 - **templates/**: HTML templates with Jinja2 syntax
 - **static/css/**: Modern CSS with CSS variables
 - **static/js/**: JavaScript for interactivity
 
 ### NLP Components
+
 - **spaCy**: Industrial NLP for entity recognition
 - **Transformers**: BERT-based sentiment analysis
 - **Sentence Transformers**: Semantic similarity
@@ -68,6 +73,7 @@ python app.py
 - **scikit-learn**: TF-IDF and ML utilities
 
 ### Adding New Features
+
 1. **Skills**: Update skills database in `app.py`
 2. **Entities**: Extend entity extraction functions
 3. **Analysis**: Add new analysis methods
@@ -75,6 +81,7 @@ python app.py
 5. **Dependencies**: Update `requirements_nlp.txt`
 
 ### Testing
+
 ```bash
 # Run diagnostics
 python diagnose_nlp.py
@@ -86,6 +93,7 @@ python -c "import app; print('App imports OK')"
 ## 📦 Deployment
 
 ### Local Deployment
+
 ```bash
 # Production setup
 setup_clean_nlp.bat
@@ -95,6 +103,7 @@ quick_start.bat
 ```
 
 ### Git Workflow
+
 ```bash
 # Clean project
 cleanup_project.bat
@@ -108,12 +117,14 @@ git push origin main
 ## 🔍 Debugging
 
 ### Common Issues
+
 1. **Import Errors**: Run `setup_clean_nlp.bat`
 2. **Model Not Found**: Check internet connection
 3. **Port In Use**: Run `easy_launcher.bat` → Stop Application
 4. **Memory Issues**: Close other applications
 
 ### Debug Tools
+
 - **diagnose_nlp.py**: Complete system check
 - **easy_launcher.bat**: Interactive troubleshooting
 - **Flask Debug Mode**: Set `debug=True` in app.py
@@ -121,12 +132,14 @@ git push origin main
 ## 📋 Maintenance
 
 ### Regular Tasks
+
 1. **Update Dependencies**: `pip install -r requirements_nlp.txt --upgrade`
 2. **Clean Project**: `cleanup_project.bat`
 3. **Test Installation**: `python diagnose_nlp.py`
 4. **Update Models**: Download latest spaCy models
 
 ### Performance Optimization
+
 - **First Run**: Models download automatically (be patient)
 - **Subsequent Runs**: Models cached for speed
 - **Memory Usage**: Close unused applications
@@ -144,18 +157,21 @@ git push origin main
 ## 📄 Code Style
 
 ### Python
+
 - Follow PEP 8 style guidelines
 - Use type hints where appropriate
 - Add docstrings for functions
 - Handle errors gracefully
 
 ### HTML/CSS
+
 - Use semantic HTML5 elements
 - Maintain responsive design
 - Use CSS variables for theming
 - Follow BEM methodology
 
 ### JavaScript
+
 - Use modern ES6+ features
 - Add comments for complex logic
 - Handle errors appropriately

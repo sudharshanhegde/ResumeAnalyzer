@@ -245,99 +245,73 @@ def advanced_entity_extraction(text):
     return sorted(unique_entities, key=lambda x: x['confidence'], reverse=True)
 
 def extract_skills_advanced(text):
-    """Advanced skills extraction using multiple techniques"""
-    load_nlp_models()
-    
-    # Expanded skills database with categories
-    skills_database = {
-        'programming_languages': [
-            'python', 'java', 'javascript', 'typescript', 'c++', 'c#', 'c', 'go', 
-            'rust', 'kotlin', 'swift', 'php', 'ruby', 'scala', 'r', 'matlab', 'perl'
-        ],
-        'web_technologies': [
-            'html', 'css', 'react', 'angular', 'vue', 'node.js', 'express', 'django', 
-            'flask', 'spring', 'asp.net', 'laravel', 'bootstrap', 'jquery', 'webpack'
-        ],
-        'databases': [
-            'sql', 'mysql', 'postgresql', 'mongodb', 'redis', 'elasticsearch', 
-            'oracle', 'sqlite', 'cassandra', 'dynamodb', 'neo4j'
-        ],
-        'cloud_platforms': [
-            'aws', 'azure', 'gcp', 'google cloud', 'heroku', 'digitalocean', 
-            'kubernetes', 'docker', 'terraform', 'ansible'
-        ],
-        'ai_ml': [
-            'machine learning', 'deep learning', 'neural networks', 'tensorflow', 
-            'pytorch', 'scikit-learn', 'pandas', 'numpy', 'nlp', 'computer vision',
-            'data science', 'artificial intelligence', 'keras', 'opencv'
-        ],
-        'tools': [
-            'git', 'github', 'gitlab', 'jenkins', 'ci/cd', 'jira', 'confluence', 
-            'slack', 'docker', 'vagrant', 'vim', 'vscode', 'intellij'
-        ]
+    """Skills extraction with lightning-fast primary mode"""
+    try:
+        # PRIMARY: Use lightning-fast extractor (4ms processing time)
+        from lightning_extractor import extract_skills_lightning_fast
+        print("⚡ Using lightning-fast extraction mode (4ms)")
+        return extract_skills_lightning_fast(text)
+    except ImportError:
+        print("⚠️  Lightning extractor not available, trying ultra-fast extractor")
+        try:
+            from ultra_fast_extractor import extract_skills_ultra_fast
+            return extract_skills_ultra_fast(text)
+        except ImportError:
+            return extract_skills_fast_fallback(text)
+    except Exception as e:
+        print(f"⚠️  Lightning extraction failed: {e}, falling back")
+        return extract_skills_fast_fallback(text)
+
+def extract_skills_premium(text):
+    """Premium skills extraction (advanced NLP) - slower but highest quality"""
+    try:
+        # For users who want maximum quality and don't mind 5-15 second wait
+        from advanced_skills_extractor import extract_advanced_skills
+        print("🎯 Using premium extraction mode (5-15s, highest quality)")
+        return extract_advanced_skills(text)
+    except ImportError:
+        print("⚠️  Premium extractor not available, using ultra-fast mode")
+        return extract_skills_advanced(text)
+    except Exception as e:
+        print(f"⚠️  Premium extraction failed: {e}, falling back to ultra-fast mode")
+        return extract_skills_advanced(text)
+
+def extract_skills_fast_fallback(text):
+    """Fast skills extraction fallback"""
+    try:
+        from fast_skills_extractor import extract_skills_quickly
+        return extract_skills_quickly(text)
+    except ImportError:
+        print("⚠️  Fast extractor not available, using basic fallback")
+        return extract_skills_basic_fallback(text)
+
+def extract_skills_basic_fallback(text):
+    """Basic skills extraction for when all else fails"""
+    # Ultra-basic skills database for ultimate fallback
+    basic_skills = {
+        'programming_languages': ['python', 'java', 'javascript', 'c++', 'c#', 'php', 'ruby', 'go', 'typescript'],
+        'web_technologies': ['html', 'css', 'react', 'angular', 'vue', 'django', 'flask', 'spring', 'bootstrap'],
+        'databases': ['sql', 'mysql', 'postgresql', 'mongodb', 'redis', 'oracle', 'sqlite'],
+        'cloud_platforms': ['aws', 'azure', 'gcp', 'kubernetes', 'docker', 'jenkins', 'terraform'],
+        'ai_ml': ['machine learning', 'tensorflow', 'pytorch', 'pandas', 'numpy', 'scikit-learn', 'nlp'],
+        'tools': ['git', 'github', 'jira', 'docker', 'linux', 'unix']
     }
     
-    # Flatten skills for processing
-    all_skills = []
-    for category, skills in skills_database.items():
-        all_skills.extend([(skill, category) for skill in skills])
-    
-    # Method 1: Exact matching (case-insensitive)
     text_lower = text.lower()
     found_skills = {}
     
-    for skill, category in all_skills:
-        if skill.lower() in text_lower:
-            if category not in found_skills:
-                found_skills[category] = []
-            found_skills[category].append({
-                'skill': skill,
-                'confidence': 0.9,
-                'method': 'exact_match'
-            })
-    
-    # Method 2: TF-IDF similarity (if sklearn is available)
-    try:
-        vectorizer = TfidfVectorizer()
-        skill_texts = [skill for skill, _ in all_skills]
-        skill_vectors = vectorizer.fit_transform(skill_texts + [text])
-        text_vector = skill_vectors[-1]
-        skill_vectors = skill_vectors[:-1]
-        
-        similarities = cosine_similarity(text_vector, skill_vectors).flatten()
-        
-        for i, (skill, category) in enumerate(all_skills):
-            if similarities[i] > 0.1:  # Threshold for similarity
+    for category, skills in basic_skills.items():
+        for skill in skills:
+            if skill.lower() in text_lower:
                 if category not in found_skills:
                     found_skills[category] = []
-                # Avoid duplicates
-                if not any(s['skill'] == skill for s in found_skills[category]):
-                    found_skills[category].append({
-                        'skill': skill,
-                        'confidence': float(similarities[i]),
-                        'method': 'tfidf'
-                    })
-    except Exception as e:
-        print(f"TF-IDF skills extraction error: {e}")
-    
-    # Method 3: spaCy similarity (if available)
-    if nlp_models['spacy']:
-        try:
-            doc = nlp_models['spacy'](text)
-            for skill, category in all_skills:
-                skill_doc = nlp_models['spacy'](skill)
-                similarity = doc.similarity(skill_doc)
-                if similarity > 0.3:  # Threshold for similarity
-                    if category not in found_skills:
-                        found_skills[category] = []
-                    if not any(s['skill'] == skill for s in found_skills[category]):
-                        found_skills[category].append({
-                            'skill': skill,
-                            'confidence': float(similarity),
-                            'method': 'spacy_similarity'
-                        })
-        except Exception as e:
-            print(f"spaCy similarity error: {e}")
+                found_skills[category].append({
+                    'skill': skill,
+                    'confidence': 0.7,
+                    'method': 'basic_fallback',
+                    'context': '',
+                    'variations_found': [skill]
+                })
     
     return found_skills
 
@@ -417,8 +391,8 @@ def analyze_sentiment(text):
     
     return {'label': 'NEUTRAL', 'score': 0.5}
 
-def analyze_resume(resume_text, job_description=None):
-    """Enhanced resume analysis using advanced NLP techniques"""
+def analyze_resume(resume_text, job_description=None, analysis_mode='lightning'):
+    """Enhanced resume analysis with user-selectable processing modes"""
     
     # Initialize results structure
     analysis_results = {
@@ -430,30 +404,71 @@ def analyze_resume(resume_text, job_description=None):
         "readability": {},
         "sentiment": {},
         "semantic_similarity": 0,
-        "advanced_insights": {}
+        "advanced_insights": {},
+        "job_match_analysis": {},
+        "processing_info": {
+            "analysis_mode": analysis_mode
+        }
     }
     
-    # Extract skills using advanced techniques
-    skills_by_category = extract_skills_advanced(resume_text)
+    import time
+    start_time = time.time()
+    
+    # Extract skills using the selected method
+    print(f"🔍 Extracting skills using {analysis_mode} mode...")
+    
+    # FORCE ADVANCED MODE FOR DEBUGGING
+    print("🎯 FORCING ADVANCED MODE FOR PROPER ATS FUNCTIONALITY")
+    analysis_mode = 'advanced'
+    
+    if analysis_mode == 'advanced':
+        # Use advanced NLP analysis (5-15 seconds)
+        skills_raw = extract_skills_premium(resume_text)
+    else:
+        # Use lightning fast analysis (2-5ms) - default
+        skills_raw = extract_skills_advanced(resume_text)
+    
+    skills_extraction_time = time.time() - start_time
+    
+    # Normalize skills format for compatibility
+    if isinstance(skills_raw, dict) and 'skills_by_category' in skills_raw:
+        # Lightning format - extract the skills_by_category
+        skills_by_category = skills_raw['skills_by_category']
+        total_skills_found = skills_raw.get('total_skills_found', 0)
+    else:
+        # Traditional format
+        skills_by_category = skills_raw
+        total_skills_found = sum(len(skills) for skills in skills_by_category.values() if isinstance(skills, list))
+    
     analysis_results["skills"] = skills_by_category
     
     # Extract entities using multiple NLP techniques
+    entities_start = time.time()
     entities = advanced_entity_extraction(resume_text)
+    entities_time = time.time() - entities_start
+    
     analysis_results["entities"] = entities
     
-    # Analyze text readability
+    # Analyze text readability (if textstat available)
+    readability_start = time.time()
     readability = analyze_text_readability(resume_text)
+    readability_time = time.time() - readability_start
+    
     analysis_results["readability"] = readability
     
     # Analyze sentiment
+    sentiment_start = time.time()
     sentiment = analyze_sentiment(resume_text)
+    sentiment_time = time.time() - sentiment_start
+    
     analysis_results["sentiment"] = sentiment
     
     # Advanced insights
+    # Use the already calculated total_skills_found
     advanced_insights = {
         "total_entities": len(entities),
         "entity_types": list(set([ent["label"] for ent in entities])),
-        "total_skills": sum(len(skills) for skills in skills_by_category.values()),
+        "total_skills": total_skills_found,
         "skill_categories": list(skills_by_category.keys()),
         "text_length": len(resume_text),
         "word_count": len(resume_text.split()),
@@ -461,47 +476,510 @@ def analyze_resume(resume_text, job_description=None):
     }
     analysis_results["advanced_insights"] = advanced_insights
     
-    # Compare with job description if provided
+    # Compare with job description if provided using mode-appropriate matching
+    job_match_start = time.time()
     if job_description:
-        # Calculate semantic similarity
-        semantic_similarity = calculate_semantic_similarity(resume_text, job_description)
-        analysis_results["semantic_similarity"] = semantic_similarity
-        
-        # Extract skills from job description
-        job_skills = extract_skills_advanced(job_description)
-        
-        # Calculate advanced match percentage
-        total_job_skills = sum(len(skills) for skills in job_skills.values())
-        total_resume_skills = sum(len(skills) for skills in skills_by_category.values())
-        
-        if total_job_skills > 0:
-            matched_skills = 0
-            missing_skills_by_category = {}
-            
-            for category, job_category_skills in job_skills.items():
-                missing_skills_by_category[category] = []
-                resume_category_skills = skills_by_category.get(category, [])
-                resume_skill_names = [skill['skill'] for skill in resume_category_skills]
+        try:
+            if analysis_mode == 'advanced':
+                # Use advanced NLP job matching (5-15 seconds, semantic analysis)
+                print("🎯 Using advanced NLP job matching with semantic analysis")
+                try:
+                    from advanced_skills_extractor import extract_advanced_skills
+                    
+                    # Extract skills from job description using advanced analysis
+                    job_skills = extract_advanced_skills(job_description)
+                    
+                    # Calculate semantic similarity and advanced matching
+                    job_match_results = calculate_advanced_job_match_enhanced(
+                        skills_by_category, job_description, job_skills
+                    )
+                    
+                except ImportError:
+                    print("⚠️ Advanced extractor not available, using lightning extractor for job skills")
+                    # Use lightning extractor for job skills
+                    from lightning_extractor import extract_skills_lightning_fast
+                    job_skills = extract_skills_lightning_fast(job_description)
+                    
+                    # Use lightning job matching instead
+                    from lightning_extractor import calculate_job_match_lightning_fast
+                    job_match_results = calculate_job_match_lightning_fast(skills_by_category, job_description)
                 
-                for job_skill in job_category_skills:
-                    if job_skill['skill'] in resume_skill_names:
-                        matched_skills += 1
+                # Map results to expected template structure  
+                analysis_results["job_match_analysis"] = job_match_results
+                analysis_results["match_percentage"] = job_match_results.get("overall_score", job_match_results.get("match_percentage", 0))
+                analysis_results["semantic_similarity"] = job_match_results.get("semantic_similarity", 0) / 100
+                
+                # Extract and map all required fields for template
+                missing_skills = job_match_results.get("missing_skills", {})
+                found_skills = job_match_results.get("matched_skills", job_match_results.get("found_skills", {}))
+                
+                # Convert defaultdict objects to regular dictionaries for proper template rendering
+                def convert_defaultdict_to_dict(obj):
+                    """Convert defaultdict objects to regular dictionaries recursively"""
+                    if hasattr(obj, 'default_factory'):  # It's a defaultdict
+                        return dict(obj)
+                    elif isinstance(obj, dict):
+                        return {k: convert_defaultdict_to_dict(v) for k, v in obj.items()}
                     else:
-                        missing_skills_by_category[category].append(job_skill['skill'])
+                        return obj
+                
+                # Convert both missing_skills and found_skills
+                missing_skills = convert_defaultdict_to_dict(missing_skills)
+                found_skills = convert_defaultdict_to_dict(found_skills)
+                
+                # Ensure found_skills is always a dictionary
+                if not isinstance(found_skills, dict):
+                    print(f"⚠️ Warning: found_skills is {type(found_skills)}, converting to dict")
+                    found_skills = {}
+                
+                # Ensure missing_skills is always a dictionary
+                if not isinstance(missing_skills, dict):
+                    print(f"⚠️ Warning: missing_skills is {type(missing_skills)}, converting to dict")
+                    missing_skills = {}
+                
+                analysis_results["missing_skills"] = missing_skills
+                analysis_results["found_skills"] = found_skills
+                
+                # Calculate totals for advanced mode
+                if "total_job_skills" in job_match_results:
+                    analysis_results["total_job_skills"] = job_match_results["total_job_skills"]
+                    analysis_results["matched_skills"] = job_match_results.get("matched_skills", 0)
+                else:
+                    # Fallback calculation for advanced mode
+                    total_job_skills = sum(len(skills) for skills in job_skills.get('skills_by_category', {}).values())
+                    matched_count = 0
+                    for category_found in found_skills.values():
+                        matched_count += len(category_found) if isinstance(category_found, list) else 0
+                    
+                    analysis_results["total_job_skills"] = total_job_skills
+                    analysis_results["matched_skills"] = matched_count
+                
+                # Generate advanced improvement suggestions
+                improvement_suggestions = generate_advanced_suggestions_v2(
+                    skills_by_category, missing_skills, entities, readability, 
+                    sentiment, job_match_results
+                )
+                analysis_results["improvement_suggestions"] = improvement_suggestions
+                
+            else:
+                # Use lightning-fast job matching (2-5ms, pattern matching)
+                from lightning_extractor import calculate_job_match_lightning_fast
+                print("⚡ Using lightning-fast job matching (4ms)")
+                job_match_results = calculate_job_match_lightning_fast(skills_by_category, job_description)
+                
+                # Map results to expected template structure
+                analysis_results["job_match_analysis"] = job_match_results
+                analysis_results["match_percentage"] = job_match_results.get("overall_score", 0)
+                analysis_results["semantic_similarity"] = job_match_results.get("semantic_similarity", 0) / 100
+                
+                # Extract and map all required fields for template
+                missing_skills = job_match_results.get("missing_skills", {})
+                found_skills = job_match_results.get("found_skills", {})
+                
+                # Convert defaultdict objects to regular dictionaries for proper template rendering
+                def convert_defaultdict_to_dict(obj):
+                    """Convert defaultdict objects to regular dictionaries recursively"""
+                    if hasattr(obj, 'default_factory'):  # It's a defaultdict
+                        return dict(obj)
+                    elif isinstance(obj, dict):
+                        return {k: convert_defaultdict_to_dict(v) for k, v in obj.items()}
+                    else:
+                        return obj
+                
+                # Convert both missing_skills and found_skills
+                missing_skills = convert_defaultdict_to_dict(missing_skills)
+                found_skills = convert_defaultdict_to_dict(found_skills)
+                
+                # Ensure data types are correct
+                if not isinstance(missing_skills, dict):
+                    print(f"⚠️ Warning: missing_skills is {type(missing_skills)}, converting to dict")
+                    missing_skills = {}
+                    
+                if not isinstance(found_skills, dict):
+                    print(f"⚠️ Warning: found_skills is {type(found_skills)}, converting to dict")
+                    found_skills = {}
+                
+                analysis_results["missing_skills"] = missing_skills
+                analysis_results["found_skills"] = found_skills
+                analysis_results["total_job_skills"] = job_match_results.get("total_job_skills", 0)
+                analysis_results["matched_skills"] = job_match_results.get("matched_skills", 0)
+                
+                # Generate basic improvement suggestions (fast)
+                improvement_suggestions = generate_lightning_suggestions(
+                    skills_by_category, missing_skills, entities, job_match_results
+                )
+                analysis_results["improvement_suggestions"] = improvement_suggestions
             
-            # Calculate match percentage
-            match_percentage = round((matched_skills / total_job_skills) * 100, 2)
-            analysis_results["match_percentage"] = match_percentage
-            analysis_results["missing_skills"] = missing_skills_by_category
-            
-            # Generate advanced improvement suggestions
-            improvement_suggestions = generate_advanced_suggestions(
-                skills_by_category, job_skills, missing_skills_by_category, 
-                entities, readability, sentiment, semantic_similarity
-            )
-            analysis_results["improvement_suggestions"] = improvement_suggestions
+        except ImportError:
+            # Fallback chain
+            print(f"⚠️ Preferred {analysis_mode} job matching not available, using fallback")
+            try:
+                from lightning_extractor import calculate_job_match_lightning_fast
+                job_match_results = calculate_job_match_lightning_fast(skills_by_category, job_description)
+                
+                # Map results properly for template
+                analysis_results["job_match_analysis"] = job_match_results
+                analysis_results["match_percentage"] = job_match_results.get("overall_score", 0)
+                missing_skills = job_match_results.get("missing_skills", {})
+                found_skills = job_match_results.get("found_skills", {})
+                
+                # Convert defaultdict objects to regular dictionaries for proper template rendering
+                def convert_defaultdict_to_dict(obj):
+                    """Convert defaultdict objects to regular dictionaries recursively"""
+                    if hasattr(obj, 'default_factory'):  # It's a defaultdict
+                        return dict(obj)
+                    elif isinstance(obj, dict):
+                        return {k: convert_defaultdict_to_dict(v) for k, v in obj.items()}
+                    else:
+                        return obj
+                
+                # Convert both missing_skills and found_skills
+                missing_skills = convert_defaultdict_to_dict(missing_skills)
+                found_skills = convert_defaultdict_to_dict(found_skills)
+                
+                # Ensure data types are correct
+                if not isinstance(missing_skills, dict):
+                    missing_skills = {}
+                if not isinstance(found_skills, dict):
+                    found_skills = {}
+                
+                analysis_results["missing_skills"] = missing_skills
+                analysis_results["found_skills"] = found_skills
+                analysis_results["total_job_skills"] = job_match_results.get("total_job_skills", 0)
+                analysis_results["matched_skills"] = job_match_results.get("matched_skills", 0)
+                
+            except ImportError:
+                # Ultimate fallback
+                basic_match_results = calculate_basic_job_match(skills_by_category, job_description)
+                analysis_results.update(basic_match_results)
+                
+                # Convert defaultdict objects to regular dictionaries for proper template rendering
+                def convert_defaultdict_to_dict(obj):
+                    """Convert defaultdict objects to regular dictionaries recursively"""
+                    if hasattr(obj, 'default_factory'):  # It's a defaultdict
+                        return dict(obj)
+                    elif isinstance(obj, dict):
+                        return {k: convert_defaultdict_to_dict(v) for k, v in obj.items()}
+                    else:
+                        return obj
+                
+                # Ensure fallback also has proper structure
+                if "missing_skills" not in analysis_results:
+                    analysis_results["missing_skills"] = {}
+                if "found_skills" not in analysis_results:
+                    analysis_results["found_skills"] = basic_match_results.get("found_skills", {})
+                if "total_job_skills" not in analysis_results:
+                    analysis_results["total_job_skills"] = basic_match_results.get("total_job_skills", 0)
+                if "matched_skills" not in analysis_results:
+                    analysis_results["matched_skills"] = basic_match_results.get("matched_skills", 0)
+                
+                # Convert defaultdict objects
+                analysis_results["missing_skills"] = convert_defaultdict_to_dict(analysis_results.get("missing_skills", {}))
+                analysis_results["found_skills"] = convert_defaultdict_to_dict(analysis_results.get("found_skills", {}))
+                    
+                # Double check data types for fallback
+                if not isinstance(analysis_results.get("found_skills"), dict):
+                    analysis_results["found_skills"] = {}
+                if not isinstance(analysis_results.get("missing_skills"), dict):
+                    analysis_results["missing_skills"] = {}
+                
+        except Exception as e:
+            print(f"⚠️ Job matching failed: {e}, using basic matching")
+            basic_match_results = calculate_basic_job_match(skills_by_category, job_description)
+            analysis_results.update(basic_match_results)
+    
+    job_match_time = time.time() - job_match_start
+    total_time = time.time() - start_time
+    
+    # Add processing information
+    analysis_results["processing_info"] = {
+        "total_time": round(total_time, 3),
+        "skills_extraction_time": round(skills_extraction_time, 3),
+        "entities_time": round(entities_time, 3),
+        "readability_time": round(readability_time, 3),
+        "sentiment_time": round(sentiment_time, 3),
+        "job_match_time": round(job_match_time, 3),
+        "analysis_mode": analysis_mode,
+        "mode": analysis_mode  # Keep for backward compatibility
+    }
+    
+    print(f"✅ Analysis completed in {total_time:.2f} seconds")
+    
+    # Debug output to check data structure
+    print(f"🔍 Debug - Final analysis results keys: {list(analysis_results.keys())}")
+    print(f"🔍 Debug - Match percentage: {analysis_results.get('match_percentage', 'MISSING')}")
+    print(f"🔍 Debug - Total job skills: {analysis_results.get('total_job_skills', 'MISSING')}")
+    print(f"🔍 Debug - Matched skills: {analysis_results.get('matched_skills', 'MISSING')}")
+    print(f"🔍 Debug - Missing skills keys: {list(analysis_results.get('missing_skills', {}).keys())}")
+    
+    # Safe debug for found_skills
+    found_skills = analysis_results.get('found_skills', {})
+    if isinstance(found_skills, dict):
+        print(f"🔍 Debug - Found skills keys: {list(found_skills.keys())}")
+    else:
+        print(f"🔍 Debug - Found skills type issue: {type(found_skills)} = {found_skills}")
+        # Fix the found_skills if it's not a dict
+        analysis_results['found_skills'] = {}
+    
+    # Debug skills extraction
+    print(f"🔍 Debug - Resume skills categories: {list(analysis_results.get('skills', {}).get('skills_by_category', {}).keys())}")
+    for category, skills in analysis_results.get('skills', {}).get('skills_by_category', {}).items():
+        skill_names = [skill['skill'] for skill in skills[:3]]  # First 3 skills per category
+        print(f"🔍 Debug - Resume {category}: {skill_names}")
     
     return analysis_results
+
+def calculate_advanced_job_match_enhanced(skills_by_category, job_description, job_skills):
+    """Enhanced job matching using advanced NLP analysis with ATS checker"""
+    try:
+        # Use the new advanced ATS checker
+        from advanced_skills_extractor import calculate_ats_score
+        
+        # Format skills for ATS checker
+        formatted_skills = {}
+        for category, skills in skills_by_category.items():
+            formatted_skills[category] = []
+            for skill in skills:
+                if isinstance(skill, dict):
+                    formatted_skills[category].append(skill)
+                else:
+                    # Convert string to dict format
+                    formatted_skills[category].append({
+                        'skill': str(skill),
+                        'confidence': 0.8
+                    })
+        
+        # Calculate ATS score
+        ats_results = calculate_ats_score(formatted_skills, job_description)
+        
+        # Format results for compatibility with existing template
+        results = {
+            'overall_score': ats_results.get('overall_score', 0),
+            'semantic_similarity': ats_results.get('semantic_similarity', 0),
+            'category_scores': ats_results.get('category_scores', {}),
+            'matched_skills': ats_results.get('matched_skills', {}),
+            'missing_skills': ats_results.get('missing_skills', {}),
+            'found_skills': ats_results.get('matched_skills', {}),  # Alias for template compatibility
+            'extra_skills': ats_results.get('extra_skills', {}),
+            'total_job_skills': sum(len(skills) for skills in ats_results.get('missing_skills', {}).values()) + 
+                               sum(len(skills) for skills in ats_results.get('matched_skills', {}).values()),
+            'matched_skills_count': sum(len(skills) for skills in ats_results.get('matched_skills', {}).values()),
+            'advanced_analysis': True
+        }
+        
+        print(f"✅ Advanced ATS analysis complete - Score: {results['overall_score']}%")
+        return results
+        
+    except Exception as e:
+        print(f"⚠️ Error in advanced job matching: {e}")
+        import traceback
+        traceback.print_exc()
+        
+        # Fallback to basic matching
+        return {
+            'overall_score': 0,
+            'semantic_similarity': 0,
+            'category_scores': {},
+            'matched_skills': {},
+            'missing_skills': {},
+            'found_skills': {},
+            'extra_skills': {},
+            'total_job_skills': 0,
+            'matched_skills_count': 0,
+            'error': str(e)
+        }
+
+
+def calculate_basic_job_match(skills_by_category, job_description):
+    """Basic job matching for fallback"""
+    try:
+        from lightning_extractor import calculate_job_match_lightning_fast
+        return calculate_job_match_lightning_fast(skills_by_category, job_description)
+    except ImportError:
+        # Ultimate fallback with simple keyword matching
+        job_words = set(job_description.lower().split())
+        resume_words = set()
+        
+        for category, skills in skills_by_category.items():
+            for skill in skills:
+                if isinstance(skill, dict):
+                    resume_words.update(skill['skill'].lower().split())
+        
+        matched_words = job_words.intersection(resume_words)
+        match_percentage = (len(matched_words) / max(len(job_words), 1)) * 100
+        
+        return {
+            'match_percentage': round(match_percentage, 1),
+            'overall_score': round(match_percentage, 1),
+            'missing_skills': {},
+            'found_skills': {},
+            'total_job_skills': len(job_words),
+            'matched_skills': len(matched_words),
+            'semantic_similarity': 50,  # Default moderate similarity
+        }
+
+
+def generate_lightning_suggestions(resume_skills, missing_skills, entities, job_match_results):
+    """Generate fast improvement suggestions for lightning mode"""
+    suggestions = []
+    
+    # Quick skills-based suggestions
+    if missing_skills:
+        high_priority_skills = []
+        for category, skills_list in missing_skills.items():
+            if skills_list:
+                # Take top 3 skills per category for speed
+                category_skills = skills_list[:3] if isinstance(skills_list, list) else [skills_list]
+                high_priority_skills.extend(category_skills)
+        
+        if high_priority_skills:
+            suggestions.append({
+                "type": "skills",
+                "priority": "high",
+                "title": "Add Missing Skills",
+                "description": "Focus on these key skills mentioned in the job description:",
+                "suggestion_list": high_priority_skills[:5],  # Top 5 for speed
+                "impact": "Improves job match score"
+            })
+    
+    # Quick match score feedback
+    overall_score = job_match_results.get("overall_score", 0)
+    if overall_score < 60:
+        suggestions.append({
+            "type": "match",
+            "priority": "high", 
+            "title": "Improve Job Match",
+            "description": f"Current match: {overall_score}%. Target: 70%+",
+            "suggestion_list": [
+                "Add more relevant keywords from job description",
+                "Quantify achievements with numbers",
+                "Use action verbs (developed, implemented, led)",
+                "Include relevant project examples"
+            ],
+            "impact": "Better ATS ranking and recruiter interest"
+        })
+    
+    # Quick contact check
+    email_found = any(ent.get('label') == 'EMAIL' for ent in entities)
+    if not email_found:
+        suggestions.append({
+            "type": "contact",
+            "priority": "high",
+            "title": "Add Contact Information", 
+            "description": "Ensure your email is clearly visible",
+            "suggestion_list": ["Add professional email address at the top"],
+            "impact": "Essential for recruiter contact"
+        })
+    
+    return suggestions
+
+def generate_advanced_suggestions_v2(resume_skills, missing_skills, entities, 
+                                   readability, sentiment, job_match_results):
+    """Generate intelligent improvement suggestions based on advanced analysis"""
+    suggestions = []
+    
+    # Skills-based suggestions from advanced analysis
+    if missing_skills:
+        for category, skills_list in missing_skills.items():
+            if skills_list:
+                # Sort by importance if available
+                if isinstance(skills_list[0], dict):
+                    skills_list = sorted(skills_list, key=lambda x: x.get('importance', 0), reverse=True)
+                    skill_names = [skill['skill'] for skill in skills_list[:5]]
+                else:
+                    skill_names = skills_list[:5]
+                
+                suggestions.append({
+                    "type": "skills",
+                    "priority": "high",
+                    "title": f"Add Missing {category.replace('_', ' ').title()} Skills",
+                    "description": f"Consider adding these {category.replace('_', ' ')} skills if you have experience:",
+                    "suggestion_list": skill_names,
+                    "impact": "Improves ATS matching and recruiter interest"
+                })
+    
+    # Advanced job match suggestions
+    overall_score = job_match_results.get("overall_score", 0)
+    semantic_similarity = job_match_results.get("semantic_similarity", 0)
+    
+    if overall_score < 60:
+        suggestions.append({
+            "type": "overall_match",
+            "priority": "high",
+            "title": "Improve Overall Job Match",
+            "description": f"Your resume matches {overall_score}% of job requirements.",
+            "suggestion_list": [
+                "Focus on developing the most important missing skills",
+                "Use more specific technical terminology",
+                "Quantify your achievements with numbers and metrics",
+                "Align your experience descriptions with job requirements"
+            ],
+            "impact": f"Target: Increase match score to 70%+"
+        })
+    
+    if semantic_similarity < 50:
+        suggestions.append({
+            "type": "semantic_alignment",
+            "priority": "high",
+            "title": "Improve Language Alignment",
+            "description": f"Your resume language similarity is {semantic_similarity}%.",
+            "suggestion_list": [
+                "Use keywords and phrases from the job description",
+                "Mirror the job posting's technical language",
+                "Include industry-specific terminology",
+                "Describe your experience using similar context"
+            ],
+            "impact": "Better ATS parsing and recruiter recognition"
+        })
+    
+    # Category-specific insights
+    category_scores = job_match_results.get("category_scores", {})
+    weak_categories = [cat for cat, score in category_scores.items() if score < 40]
+    
+    if weak_categories:
+        suggestions.append({
+            "type": "category_focus",
+            "priority": "medium",
+            "title": "Strengthen Weak Skill Areas",
+            "description": "Focus development on these skill categories:",
+            "suggestion_list": [cat.replace('_', ' ').title() for cat in weak_categories],
+            "impact": "Balanced skill profile for better job matching"
+        })
+    
+    # Continue with existing suggestions for readability, sentiment, etc.
+    if readability:
+        flesch_score = readability.get('flesch_reading_ease', 0)
+        if flesch_score < 60:
+            suggestions.append({
+                "type": "readability",
+                "priority": "medium",
+                "title": "Improve Readability",
+                "description": "Your resume may be difficult to read quickly.",
+                "suggestion_list": [
+                    "Use shorter sentences",
+                    "Simplify complex terminology",
+                    "Use bullet points for easy scanning",
+                    "Break up long paragraphs"
+                ],
+                "impact": f"Current readability score: {flesch_score:.1f}/100"
+            })
+    
+    if sentiment.get('label') == 'NEGATIVE':
+        suggestions.append({
+            "type": "tone",
+            "priority": "medium", 
+            "title": "Improve Tone and Language",
+            "description": "Consider using more positive language in your resume.",
+            "suggestion_list": [
+                "Focus on achievements rather than responsibilities",
+                "Use action verbs (achieved, led, improved, created)",
+                "Highlight positive outcomes and impacts",
+                "Avoid negative or passive language"
+            ],
+            "impact": "Creates a more compelling first impression"
+        })
+    
+    return suggestions
 
 def generate_advanced_suggestions(resume_skills, job_skills, missing_skills, 
                                 entities, readability, sentiment, semantic_similarity):
@@ -635,6 +1113,7 @@ def analyze():
     
     file = request.files['resume']
     job_description = request.form.get('job_description', '')
+    analysis_mode = request.form.get('analysis_mode', 'lightning')  # Default to lightning
     
     if file.filename == '':
         flash('No selected file')
@@ -651,14 +1130,15 @@ def analyze():
             flash('Error extracting text from PDF')
             return redirect(request.url)
         
-        # Analyze resume
-        analysis_results = analyze_resume(resume_text, job_description)
+        # Analyze resume with chosen mode
+        analysis_results = analyze_resume(resume_text, job_description, analysis_mode)
         
         return render_template('results.html', 
                               results=analysis_results, 
                               resume_text=resume_text, 
                               job_description=job_description,
-                              filename=filename)
+                              filename=filename,
+                              analysis_mode=analysis_mode)
     
     flash('Invalid file type. Please upload a PDF.')
     return redirect(request.url)

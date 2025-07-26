@@ -45,6 +45,34 @@
                             </div>
                         </div>
 
+                        <div class="form-section">
+                            <div class="form-group">
+                                <label>
+                                    <i class='bx bx-cog'></i>
+                                    Analysis Mode
+                                </label>
+                                <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+                                    <label class="radio-option" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1rem; border: 2px solid var(--border-color); border-radius: 8px; cursor: pointer; flex: 1;">
+                                        <input type="radio" name="analysis_mode" value="lightning" style="margin: 0;">
+                                        <div>
+                                            <div style="font-weight: 600; color: var(--text-primary);">⚡ Lightning Fast</div>
+                                            <div style="font-size: 0.75rem; color: var(--text-secondary);">2-5ms processing • Regex patterns</div>
+                                        </div>
+                                    </label>
+                                    <label class="radio-option" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1rem; border: 2px solid var(--border-color); border-radius: 8px; cursor: pointer; flex: 1;">
+                                        <input type="radio" name="analysis_mode" value="advanced" checked style="margin: 0;">
+                                        <div>
+                                            <div style="font-weight: 600; color: var(--text-primary);">🎯 Advanced NLP</div>
+                                            <div style="font-size: 0.75rem; color: var(--text-secondary);">5-15s processing • AI analysis</div>
+                                        </div>
+                                    </label>
+                                </div>
+                                <small style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem; display: block;">
+                                    Lightning Fast: Instant results with pattern matching | Advanced NLP: Semantic analysis, sentiment, entities, context understanding
+                                </small>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <button type="submit" class="btn-primary">
                                 <i class='bx bx-search-alt-2'></i>

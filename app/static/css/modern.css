@@ -1205,6 +1205,25 @@ footer {
     }
 }
 
+/* Radio option styling */
+.radio-option {
+    transition: var(--transition);
+}
+
+.radio-option:hover {
+    border-color: var(--primary-color) !important;
+    background-color: var(--bg-secondary);
+}
+
+.radio-option input[type="radio"]:checked + div {
+    color: var(--primary-color);
+}
+
+.radio-option:has(input[type="radio"]:checked) {
+    border-color: var(--primary-color) !important;
+    background-color: rgba(37, 99, 235, 0.05);
+}
+
 @media (min-width: 768px) {
     .btn-primary {
         width: auto;

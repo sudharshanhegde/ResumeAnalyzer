@@ -7,7 +7,7 @@ An intelligent resume analysis tool powered by cutting-edge Natural Language Pro
 ### **Just Double-Click and Go!**
 
 1. **Desktop Shortcut**: Double-click "Resume Analyzer" on your desktop
-2. **Quick Start**: Double-click `quick_start.bat` 
+2. **Quick Start**: Double-click `quick_start.bat`
 3. **Interactive Menu**: Double-click `easy_launcher.bat`
 
 **That's it!** The application will start automatically and open in your browser at `http://localhost:5001`
@@ -15,12 +15,14 @@ An intelligent resume analysis tool powered by cutting-edge Natural Language Pro
 ## 🎯 Advanced NLP Features
 
 ### Multi-Model Named Entity Recognition (NER)
+
 - **spaCy NER**: Industrial-strength entity extraction for persons, organizations, locations, dates, and more
 - **Transformer-based NER**: BERT-based models for high-accuracy entity recognition
 - **NLTK NER**: Traditional linguistic approach for comprehensive coverage
 - **Enhanced Regex Patterns**: Custom patterns for emails, phones, degrees, GPAs, and URLs
 
 ### Advanced Skills Extraction
+
 - **Categorized Skills Database**: Organized by programming languages, web technologies, databases, cloud platforms, AI/ML, and tools
 - **Multiple Detection Methods**:
   - Exact string matching with confidence scoring
@@ -29,15 +31,18 @@ An intelligent resume analysis tool powered by cutting-edge Natural Language Pro
   - Context-aware skill identification
 
 ### Semantic Analysis
+
 - **Semantic Similarity**: Deep learning-based comparison between resume and job description using sentence transformers
 - **Content Alignment**: Measures how well your resume matches the job requirements beyond simple keyword matching
 
 ### Text Analytics
+
 - **Readability Analysis**: Multiple readability metrics including Flesch Reading Ease, Gunning Fog Index, and more
 - **Sentiment Analysis**: AI-powered sentiment detection using transformer models
 - **Text Statistics**: Comprehensive analysis of word count, sentence structure, and content complexity
 
 ### Intelligent Suggestions Engine
+
 - **Priority-based Recommendations**: High, medium, and low priority suggestions with impact analysis
 - **Contextual Advice**: Suggestions based on semantic similarity, readability scores, and sentiment analysis
 - **ATS Optimization**: Specific recommendations for Applicant Tracking System compatibility
@@ -47,11 +52,13 @@ An intelligent resume analysis tool powered by cutting-edge Natural Language Pro
 ### **First Time Setup**
 
 1. **Run the clean installer:**
+
    ```bash
    setup_clean_nlp.bat
    ```
 
 2. **Create desktop shortcut:**
+
    ```bash
    create_shortcut.ps1
    ```
@@ -61,6 +68,7 @@ An intelligent resume analysis tool powered by cutting-edge Natural Language Pro
    - Double-click `quick_start.bat`
 
 ### **If You Need Help**
+
 - Run `diagnose_nlp.py` for troubleshooting
 - Check `EASY_ACCESS_GUIDE.md` for detailed instructions
 - Use `easy_launcher.bat` for interactive menu
@@ -131,21 +139,25 @@ python app.py
 ## 🔧 Troubleshooting
 
 ### **Application won't start?**
+
 1. Run `easy_launcher.bat` → Choose [5] Run Diagnostics
 2. Check the output for any missing dependencies
 3. If needed, run `setup_clean_nlp.bat` for fresh installation
 
 ### **Models not downloading?**
+
 1. Check your internet connection
 2. Run `diagnose_nlp.py` to verify installation
 3. Models are downloaded on first run (may take a few minutes)
 
 ### **Port already in use?**
+
 1. Run `easy_launcher.bat` → Choose [3] Stop Application
 2. Or restart your computer
 3. Try starting again
 
 ### **Performance issues?**
+
 1. First run downloads large AI models (be patient)
 2. Subsequent runs will be much faster
 3. Close other applications to free up memory
@@ -306,12 +318,14 @@ Comprehensive text quality assessment:
 ## 🎯 Benefits
 
 ### **For Job Seekers**
+
 - **Higher Accuracy**: Multiple NLP models ensure comprehensive analysis
 - **Semantic Understanding**: Matches concepts, not just keywords
 - **Intelligent Feedback**: AI-powered suggestions with priority ranking
 - **ATS Optimization**: Ensures compatibility with automated screening systems
 
 ### **For Recruiters**
+
 - **Deeper Insights**: Understanding beyond surface-level keyword matching
 - **Quality Assessment**: Readability and sentiment analysis of candidate materials
 - **Semantic Matching**: Find candidates with related skills and experience
@@ -319,10 +333,15 @@ Comprehensive text quality assessment:
 ## 📝 Example Analysis Output
 
 ### **Match Score**: 87% (Excellent match!)
+
 ### **Sentiment**: Positive (89% confidence)
+
 ### **Readability**: Grade 12.3 (Professional level)
+
 ### **Skills Found**: 23 technical skills across 8 categories
+
 ### **Entities**: 15 organizations, 8 locations, 12 dates
+
 ### **Suggestions**: 5 high-priority improvements
 
 ## 🤝 Contributing
@@ -340,6 +359,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## 🆕 Version 2.0 - Advanced NLP Edition
 
 **Latest Features:**
+
 - Complete NLP pipeline with multiple AI models
 - Professional modern UI with enhanced analytics
 - Easy launcher system with desktop shortcuts

@@ -232,10 +232,86 @@ yarn-error.log*
 # Additional ignores for this project
 # ==========================================
 
-# Old setup files (keeping only the main ones)
-setup.bat
-setup_advanced_nlp.bat
+# Batch and Script Files (Development Only)
+*.bat
+*.ps1
+!run.bat
+!setup.bat
+
+# Multiple Setup and Launcher Files (Keep only essential ones)
+app_lightning.py
+check_status.bat
+cleanup_project.bat
 cleanup_venv.bat
-test_nlp_setup.py
-run.bat
+create_shortcut.ps1
+diagnose_nlp.py
+easy_launcher.bat
+launcher.bat
+launcher.ps1
+lightning_start.bat
+quick_start.bat
+run_lightning.py
 run_nlp.bat
+setup_advanced_nlp.bat
+setup_advanced_skills.bat
+setup_clean_nlp.bat
+smart_launcher.bat
+start_analyzer.bat
+stop_analyzer.bat
+
+# Test and Demo Files
+demo_advanced_skills.py
+quick_demo.py
+test_components.py
+test_format_fix.py
+test_full_analysis.py
+test_lightning_pipeline.py
+test_modes.py
+test_nlp_setup.py
+
+# Extra Extractors (Keep only main ones)
+ultra_fast_extractor.py
+fast_skills_extractor.py
+
+# Multiple Documentation Files (Keep only README.md and main guides)
+ADVANCED_SKILLS_GUIDE.md
+DEVELOPMENT.md
+EASY_ACCESS_GUIDE.md
+HOW_TO_RUN.md
+INTERVIEW_PREPARATION.md
+LAUNCH_GUIDE.md
+LIGHTNING_GUIDE.md
+PERFORMANCE_GUIDE.md
+SETUP_GUIDE.md
+SYSTEM_COMPLETE.md
+USAGE_GUIDE.md
+
+# Learning Materials Directory (if it contains large files)
+learning_materials/
+
+# Virtual Environment Directories
+venv311/
+ui_venv/
+nlp_resume_env/
+
+# Python Cache
+__pycache__/
+
+# Uploaded Resume Files (keep structure but not content)
+app/static/uploads/*.pdf
+app/static/uploads/*.doc
+app/static/uploads/*.docx
+!app/static/uploads/.gitkeep
+
+# ==========================================
+# Essential Files to Keep (commented for reference)
+# ==========================================
+# Keep these core files:
+# - app.py (main Flask application)
+# - advanced_skills_extractor.py (advanced ATS checker)
+# - lightning_extractor.py (fast extraction)
+# - app/templates/ (HTML templates)
+# - app/static/css/ (stylesheets)
+# - requirements.txt (Python dependencies)
+# - README.md (main documentation)
+# - .gitignore (this file)

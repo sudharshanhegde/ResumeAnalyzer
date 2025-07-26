@@ -29,30 +29,295 @@
             <div class="results-container">
                 {% if results.match_percentage > 0 %}
                 <div class="card">
-                    <h2><i class='bx bx-target-lock'></i> Job Match Score</h2>
-                    <div class="score-card">
-                        <div class="score-details">
-                            <div class="score-title">Match Percentage</div>
-                            <div class="score-value">{{ results.match_percentage }}%</div>
-                        </div>
-                        <div class="score-container">
-                            <div class="progress-bar">
-                                <div class="progress" style="width: {{ results.match_percentage }}%"></div>
+                    <h2><i class='bx bx-target-lock'></i> Job Match Analysis</h2>
+                    
+                    <!-- Overall Score -->
+                    <div class="score-card" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border: 2px solid #e2e8f0; border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                        <div class="score-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <div class="score-details">
+                                <div class="score-title" style="font-size: 1.125rem; color: var(--text-secondary); font-weight: 500; margin-bottom: 0.5rem;">Resume to Job Match</div>
+                                <div class="score-value" style="font-size: 3rem; font-weight: 700; color: {% if results.match_percentage >= 80 %}var(--success-color){% elif results.match_percentage >= 60 %}var(--primary-color){% elif results.match_percentage >= 40 %}var(--warning-color){% else %}var(--danger-color){% endif %}; line-height: 1;">{{ results.match_percentage }}%</div>
+                            </div>
+                            <div class="score-icon" style="font-size: 4rem; color: {% if results.match_percentage >= 80 %}var(--success-color){% elif results.match_percentage >= 60 %}var(--primary-color){% elif results.match_percentage >= 40 %}var(--warning-color){% else %}var(--danger-color){% endif %}; opacity: 0.7;">
+                                {% if results.match_percentage >= 80 %}
+                                <i class='bx bxs-badge-check'></i>
+                                {% elif results.match_percentage >= 60 %}
+                                <i class='bx bxs-like'></i>
+                                {% elif results.match_percentage >= 40 %}
+                                <i class='bx bxs-info-circle'></i>
+                                {% else %}
+                                <i class='bx bxs-x-circle'></i>
+                                {% endif %}
                             </div>
                         </div>
-                        <div class="score-message">
-                            {% if results.match_percentage >= 80 %}
-                            <div class="score-great"><i class='bx bxs-check-circle'></i> Excellent match! Your resume aligns well with this job.</div>
+                        
+                        <!-- Enhanced Progress Bar -->
+                        <div class="enhanced-progress-container" style="margin-bottom: 1.5rem;">
+                            <div class="progress-labels" style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.75rem; color: var(--text-light);">
+                                <span>0%</span>
+                                <span>25%</span>
+                                <span>50%</span>
+                                <span>75%</span>
+                                <span>100%</span>
+                            </div>
+                            <div class="enhanced-progress-bar" style="position: relative; height: 20px; background: linear-gradient(90deg, #fee2e2 0%, #fef3c7 25%, #dbeafe 50%, #dcfce7 75%, #dcfce7 100%); border-radius: 10px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
+                                <!-- Progress Fill -->
+                                <div class="progress-fill" style="position: absolute; top: 0; left: 0; height: 100%; background: linear-gradient(90deg, {% if results.match_percentage >= 80 %}#10b981, #059669{% elif results.match_percentage >= 60 %}#3b82f6, #2563eb{% elif results.match_percentage >= 40 %}#f59e0b, #d97706{% else %}#ef4444, #dc2626{% endif %}); border-radius: 10px; width: {{ results.match_percentage }}%; transition: width 1s ease-in-out; box-shadow: 0 2px 8px rgba({% if results.match_percentage >= 80 %}16, 185, 129{% elif results.match_percentage >= 60 %}59, 130, 246{% elif results.match_percentage >= 40 %}245, 158, 11{% else %}239, 68, 68{% endif %}, 0.4);"></div>
+                                
+                                <!-- Milestone Markers -->
+                                <div class="milestone-markers" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;">
+                                    <div style="position: absolute; left: 25%; top: 0; width: 2px; height: 100%; background: rgba(255,255,255,0.6);"></div>
+                                    <div style="position: absolute; left: 50%; top: 0; width: 2px; height: 100%; background: rgba(255,255,255,0.6);"></div>
+                                    <div style="position: absolute; left: 75%; top: 0; width: 2px; height: 100%; background: rgba(255,255,255,0.6);"></div>
+                                </div>
+                                
+                                <!-- Current Score Indicator -->
+                                <div class="score-indicator" style="position: absolute; left: {{ results.match_percentage }}%; top: -8px; transform: translateX(-50%); width: 16px; height: 16px; background: {% if results.match_percentage >= 80 %}var(--success-color){% elif results.match_percentage >= 60 %}var(--primary-color){% elif results.match_percentage >= 40 %}var(--warning-color){% else %}var(--danger-color){% endif %}; border: 3px solid white; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 10;"></div>
+                            </div>
+                            
+                            <!-- Score Range Labels -->
+                            <div class="range-labels" style="display: flex; justify-content: space-between; margin-top: 0.75rem; font-size: 0.6875rem; color: var(--text-light);">
+                                <span style="color: var(--danger-color);">Poor</span>
+                                <span style="color: var(--warning-color);">Fair</span>
+                                <span style="color: var(--primary-color);">Good</span>
+                                <span style="color: var(--success-color);">Excellent</span>
+                            </div>
+                        </div>
+                        
+                        <div class="score-message" style="text-align: center; padding: 1rem; border-radius: 8px; background: {% if results.match_percentage >= 80 %}rgba(16, 185, 129, 0.1){% elif results.match_percentage >= 60 %}rgba(59, 130, 246, 0.1){% elif results.match_percentage >= 40 %}rgba(245, 158, 11, 0.1){% else %}rgba(239, 68, 68, 0.1){% endif %}; border: 1px solid {% if results.match_percentage >= 80 %}rgba(16, 185, 129, 0.2){% elif results.match_percentage >= 60 %}rgba(59, 130, 246, 0.2){% elif results.match_percentage >= 40 %}rgba(245, 158, 11, 0.2){% else %}rgba(239, 68, 68, 0.2){% endif %};">
+                            {% if results.match_percentage >= 90 %}
+                            <div class="score-perfect" style="color: var(--success-color); font-weight: 600;"><i class='bx bxs-badge-check'></i> Perfect Match! You're an ideal candidate for this position.</div>
+                            {% elif results.match_percentage >= 80 %}
+                            <div class="score-great" style="color: var(--success-color); font-weight: 600;"><i class='bx bxs-check-circle'></i> Excellent match! Your resume aligns very well with this job.</div>
                             {% elif results.match_percentage >= 60 %}
-                            <div class="score-good"><i class='bx bxs-check-circle'></i> Good match! Consider addressing the missing skills.</div>
+                            <div class="score-good" style="color: var(--primary-color); font-weight: 600;"><i class='bx bxs-like'></i> Good match! Consider addressing a few missing skills to improve your chances.</div>
                             {% elif results.match_percentage >= 40 %}
-                            <div class="score-average"><i class='bx bxs-info-circle'></i> Average match. Try to incorporate more relevant skills.</div>
+                            <div class="score-average" style="color: var(--warning-color); font-weight: 600;"><i class='bx bxs-info-circle'></i> Fair match. Try to incorporate more relevant skills and experience.</div>
                             {% else %}
-                            <div class="score-poor"><i class='bx bxs-error'></i> Low match. Your resume needs significant updates for this role.</div>
+                            <div class="score-poor" style="color: var(--danger-color); font-weight: 600;"><i class='bx bxs-x-circle'></i> Low match. Your resume needs significant updates for this role.</div>
                             {% endif %}
                         </div>
                     </div>
                     
+                    <!-- Comparison Scale Explanation -->
+                    <div class="comparison-scale" style="margin-top: 2rem; padding: 1.5rem; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: var(--radius-lg); border: 1px solid var(--border-light);">
+                        <h3 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.125rem;">
+                            <i class='bx bx-info-circle' style="color: var(--primary-color);"></i> How Job Matching Works
+                        </h3>
+                        
+                        <div class="scale-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                            <div class="scale-item" style="text-align: center; padding: 1rem; background: white; border-radius: 8px; box-shadow: var(--shadow-sm);">
+                                <div style="font-weight: 700; color: var(--success-color); font-size: 1.25rem;">90-100%</div>
+                                <div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">Perfect Match</div>
+                                <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem;">Apply immediately</div>
+                            </div>
+                            <div class="scale-item" style="text-align: center; padding: 1rem; background: white; border-radius: 8px; box-shadow: var(--shadow-sm);">
+                                <div style="font-weight: 700; color: var(--success-color); font-size: 1.25rem;">80-89%</div>
+                                <div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">Excellent</div>
+                                <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem;">Strong candidate</div>
+                            </div>
+                            <div class="scale-item" style="text-align: center; padding: 1rem; background: white; border-radius: 8px; box-shadow: var(--shadow-sm);">
+                                <div style="font-weight: 700; color: var(--primary-color); font-size: 1.25rem;">60-79%</div>
+                                <div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">Good Match</div>
+                                <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem;">Minor improvements</div>
+                            </div>
+                            <div class="scale-item" style="text-align: center; padding: 1rem; background: white; border-radius: 8px; box-shadow: var(--shadow-sm);">
+                                <div style="font-weight: 700; color: var(--warning-color); font-size: 1.25rem;">40-59%</div>
+                                <div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">Fair Match</div>
+                                <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem;">Skill gaps exist</div>
+                            </div>
+                            <div class="scale-item" style="text-align: center; padding: 1rem; background: white; border-radius: 8px; box-shadow: var(--shadow-sm);">
+                                <div style="font-weight: 700; color: var(--danger-color); font-size: 1.25rem;">0-39%</div>
+                                <div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">Low Match</div>
+                                <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem;">Major updates needed</div>
+                            </div>
+                        </div>
+                        
+                        <div class="calculation-explanation" style="background: rgba(37, 99, 235, 0.05); padding: 1rem; border-radius: 8px; border-left: 4px solid var(--primary-color);">
+                            <h4 style="color: var(--primary-color); margin-bottom: 0.5rem; font-size: 1rem;">How the Score is Calculated:</h4>
+                            <ul style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.6; margin: 0; padding-left: 1.25rem;">
+                                <li><strong>Skill Matching:</strong> Compares your resume skills with job requirements</li>
+                                <li><strong>Category Analysis:</strong> Evaluates technical, soft, and domain-specific skills separately</li>
+                                {% if results.processing_info.analysis_mode == 'advanced' %}
+                                <li><strong>Semantic Similarity:</strong> AI analysis of language alignment and context</li>
+                                <li><strong>Context Understanding:</strong> How skills are presented and positioned</li>
+                                {% else %}
+                                <li><strong>Pattern Matching:</strong> Direct keyword and phrase recognition</li>
+                                <li><strong>Frequency Analysis:</strong> How often skills are mentioned</li>
+                                {% endif %}
+                                <li><strong>Weighted Scoring:</strong> Critical skills have higher impact on overall score</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Overall Match for Job Description -->
+                    <div class="overall-job-match" style="margin-top: 2rem; padding: 2rem; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: var(--radius-lg); border: 2px solid var(--border-light);">
+                        <h3 style="color: var(--text-primary); margin-bottom: 1.5rem; font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class='bx bx-chart-line' style="color: var(--primary-color);"></i> 
+                            Overall Match for Job Description
+                        </h3>
+                        
+                        <div class="match-summary-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
+                            <!-- Skills Found -->
+                            <div class="match-stat-card" style="background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm);">
+                                <div class="stat-header" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                                    <div class="stat-icon" style="width: 48px; height: 48px; background: rgba(16, 185, 129, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                        <i class='bx bxs-check-circle' style="color: var(--success-color); font-size: 1.5rem;"></i>
+                                    </div>
+                                    <div>
+                                        <div class="stat-title" style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Skills Found</div>
+                                        <div class="stat-value" style="font-size: 1.75rem; font-weight: 700; color: var(--success-color);">
+                                            {% if results.job_match_analysis and results.job_match_analysis.matched_skills_count %}
+                                                {{ results.job_match_analysis.matched_skills_count }}
+                                            {% elif results.matched_skills is number %}
+                                                {{ results.matched_skills }}
+                                            {% elif results.job_match_analysis and results.job_match_analysis.matched_skills %}
+                                                {% set count = 0 %}
+                                                {% for category, skills in results.job_match_analysis.matched_skills.items() %}
+                                                    {% if skills %}
+                                                        {% set count = count + skills|length %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {{ count }}
+                                            {% else %}
+                                                {{ (results.match_percentage / 100 * results.total_job_skills)|round|int if results.total_job_skills else 0 }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="stat-description" style="font-size: 0.875rem; color: var(--text-light);">
+                                    Skills that match job requirements
+                                </div>
+                            </div>
+                            
+                            <!-- Skills Missing -->
+                            <div class="match-stat-card" style="background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm);">
+                                <div class="stat-header" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                                    <div class="stat-icon" style="width: 48px; height: 48px; background: rgba(239, 68, 68, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                        <i class='bx bxs-x-circle' style="color: var(--danger-color); font-size: 1.5rem;"></i>
+                                    </div>
+                                    <div>
+                                        <div class="stat-title" style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Skills Missing</div>
+                                        <div class="stat-value" style="font-size: 1.75rem; font-weight: 700; color: var(--danger-color);">
+                                            {% if results.job_match_analysis %}
+                                                {% set missing_count = 0 %}
+                                                {% for category, skills in results.job_match_analysis.missing_skills.items() %}
+                                                    {% set missing_count = missing_count + (skills|length if skills else 0) %}
+                                                {% endfor %}
+                                                {{ missing_count }}
+                                            {% elif results.missing_skills %}
+                                                {% set missing_count = 0 %}
+                                                {% for category, skills in results.missing_skills.items() %}
+                                                    {% set missing_count = missing_count + (skills|length if skills else 0) %}
+                                                {% endfor %}
+                                                {{ missing_count }}
+                                            {% else %}
+                                                {{ (results.total_job_skills - (results.match_percentage / 100 * results.total_job_skills)|round|int) if results.total_job_skills else 0 }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="stat-description" style="font-size: 0.875rem; color: var(--text-light);">
+                                    Skills mentioned in job but not in resume
+                                </div>
+                            </div>
+                            
+                            <!-- Total Job Requirements -->
+                            <div class="match-stat-card" style="background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm);">
+                                <div class="stat-header" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                                    <div class="stat-icon" style="width: 48px; height: 48px; background: rgba(59, 130, 246, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                        <i class='bx bxs-briefcase' style="color: var(--primary-color); font-size: 1.5rem;"></i>
+                                    </div>
+                                    <div>
+                                        <div class="stat-title" style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Total Requirements</div>
+                                        <div class="stat-value" style="font-size: 1.75rem; font-weight: 700; color: var(--primary-color);">
+                                            {{ results.total_job_skills|default(0) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="stat-description" style="font-size: 0.875rem; color: var(--text-light);">
+                                    Total skills identified in job description
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Match Breakdown Visual -->
+                        <div class="match-breakdown" style="margin-top: 2rem; padding: 1.5rem; background: rgba(255, 255, 255, 0.7); border-radius: 12px; border: 1px solid var(--border-light);">
+                            <h4 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1rem;">Skill Match Breakdown</h4>
+                            <div class="breakdown-visual" style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                <div class="breakdown-bar" style="flex: 1; height: 24px; background: #f1f5f9; border-radius: 12px; overflow: hidden; position: relative;">
+                                    <div class="matched-portion" style="height: 100%; background: linear-gradient(90deg, var(--success-color), #34d399); width: {{ results.match_percentage }}%; border-radius: 12px; position: relative;">
+                                        {% if results.match_percentage > 15 %}
+                                        <span style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: white; font-size: 0.75rem; font-weight: 600;">{{ results.match_percentage }}%</span>
+                                        {% endif %}
+                                    </div>
+                                    {% if results.match_percentage <= 15 %}
+                                    <span style="position: absolute; left: {{ results.match_percentage + 2 }}%; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 0.75rem; font-weight: 600;">{{ results.match_percentage }}%</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="breakdown-legend" style="display: flex; gap: 2rem; font-size: 0.875rem;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <div style="width: 16px; height: 16px; background: var(--success-color); border-radius: 4px;"></div>
+                                    <span style="color: var(--text-secondary);">Matched Skills</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <div style="width: 16px; height: 16px; background: #f1f5f9; border-radius: 4px;"></div>
+                                    <span style="color: var(--text-secondary);">Missing Skills</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Advanced Job Match Analysis -->
+                    {% if results.job_match_analysis %}
+                    <div class="job-analysis-details" style="margin-top: 2rem;">
+                        {% if results.job_match_analysis.semantic_similarity %}
+                        <div class="semantic-score">
+                            <h3><i class='bx bx-brain'></i> Language Alignment</h3>
+                            <div class="similarity-bar" style="background: var(--bg-tertiary); border-radius: var(--radius-xl); height: 12px; overflow: hidden; margin: 1rem 0;">
+                                <div class="similarity-progress" style="height: 100%; background: linear-gradient(90deg, var(--primary-color), var(--primary-light)); border-radius: var(--radius-xl); transition: width 0.6s ease; width: {{ results.job_match_analysis.semantic_similarity }}%"></div>
+                            </div>
+                            <p style="color: var(--text-secondary); font-size: 0.875rem;">Language similarity: {{ results.job_match_analysis.semantic_similarity }}%</p>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Category Breakdown -->
+                        {% if results.job_match_analysis.category_scores %}
+                        <div class="category-breakdown" style="margin-top: 2rem;">
+                            <h3><i class='bx bx-pie-chart-alt-2'></i> Skill Category Breakdown</h3>
+                            <div class="category-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                                {% for category, score in results.job_match_analysis.category_scores.items() %}
+                                <div class="category-item" style="background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
+                                    <div class="category-name" style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">
+                                        {{ category.replace('_', ' ').title() }}
+                                    </div>
+                                    <div class="category-score" style="font-size: 1.25rem; color: var(--primary-color); font-weight: 700;">
+                                        {{ score }}%
+                                    </div>
+                                    <div class="category-bar" style="background: var(--bg-tertiary); height: 6px; border-radius: 3px; margin-top: 0.5rem; overflow: hidden;">
+                                        <div style="height: 100%; background: {% if score >= 70 %}var(--success-color){% elif score >= 40 %}var(--warning-color){% else %}var(--error-color){% endif %}; width: {{ score }}%; border-radius: 3px;"></div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Analysis Summary -->
+                        {% if results.job_match_analysis.analysis %}
+                        <div class="analysis-summary" style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-secondary); border-radius: var(--radius-lg); border-left: 4px solid var(--primary-color);">
+                            <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">
+                                <i class='bx bx-bulb'></i> AI Analysis
+                            </h3>
+                            <p style="color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                                {{ results.job_match_analysis.analysis }}
+                            </p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <!-- Fallback for basic semantic similarity -->
                     {% if results.semantic_similarity %}
                     <div class="semantic-score" style="margin-top: 2rem;">
                         <h3><i class='bx bx-brain'></i> Semantic Similarity</h3>
@@ -61,6 +326,7 @@
                         </div>
                         <p style="color: var(--text-secondary); font-size: 0.875rem;">Content alignment: {{ (results.semantic_similarity * 100)|round(1) }}%</p>
                     </div>
+                    {% endif %}
                     {% endif %}
                 </div>
                 {% endif %}
@@ -148,7 +414,7 @@
 
                 <!-- Skills Section -->
                 <div class="card">
-                    <h2><i class='bx bx-check-circle'></i> Skills Analysis</h2>
+                    <h2><i class='bx bx-check-circle'></i> Advanced Skills Analysis</h2>
                     
                     {% if results.skills %}
                     <div class="skills-grid">
@@ -156,25 +422,101 @@
                         {% if skills_list %}
                         <div class="skill-category">
                             <h4>
-                                {% if category == 'technical_skills' %}
-                                <i class='bx bx-code-alt'></i> Technical Skills
-                                {% elif category == 'soft_skills' %}
-                                <i class='bx bx-heart'></i> Soft Skills
+                                {% if category == 'programming_languages' %}
+                                <i class='bx bx-code-alt'></i> Programming Languages
+                                {% elif category == 'web_technologies' %}
+                                <i class='bx bx-globe'></i> Web Technologies
+                                {% elif category == 'databases' %}
+                                <i class='bx bx-data'></i> Databases
+                                {% elif category == 'cloud_platforms' %}
+                                <i class='bx bx-cloud'></i> Cloud Platforms
+                                {% elif category == 'ai_ml' %}
+                                <i class='bx bx-brain'></i> AI & Machine Learning
+                                {% elif category == 'tools_and_platforms' %}
+                                <i class='bx bx-wrench'></i> Tools & Platforms
+                                {% elif category == 'methodologies' %}
+                                <i class='bx bx-cog'></i> Methodologies
                                 {% else %}
                                 <i class='bx bx-category'></i> {{ category.replace('_', ' ').title() }}
                                 {% endif %}
+                                <span class="skill-count">({{ skills_list|length }} found)</span>
                             </h4>
-                            <div class="skill-list">
+                            
+                            <div class="advanced-skill-list" style="display: grid; gap: 0.75rem;">
                                 {% for skill_obj in skills_list %}
-                                <span class="skill-tag" title="Confidence: {{ (skill_obj.confidence * 100)|round }}%">
-                                    {{ skill_obj.skill }}
-                                </span>
+                                <div class="advanced-skill-item" style="background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid {% if skill_obj.confidence >= 0.8 %}var(--success-color){% elif skill_obj.confidence >= 0.6 %}var(--warning-color){% else %}var(--info-color){% endif %};">
+                                    <div class="skill-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                        <span class="skill-name" style="font-weight: 600; color: var(--text-primary);">
+                                            {{ skill_obj.skill }}
+                                        </span>
+                                        <div class="skill-confidence" style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <div class="confidence-bar" style="width: 60px; height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden;">
+                                                <div style="height: 100%; background: {% if skill_obj.confidence >= 0.8 %}var(--success-color){% elif skill_obj.confidence >= 0.6 %}var(--warning-color){% else %}var(--info-color){% endif %}; width: {{ (skill_obj.confidence * 100)|round }}%; border-radius: 3px;"></div>
+                                            </div>
+                                            <span class="confidence-text" style="font-size: 0.75rem; color: var(--text-secondary);">
+                                                {{ (skill_obj.confidence * 100)|round }}%
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    {% if skill_obj.variations_found and skill_obj.variations_found|length > 1 %}
+                                    <div class="skill-variations" style="margin-bottom: 0.5rem;">
+                                        <span style="font-size: 0.75rem; color: var(--text-secondary);">Found as: </span>
+                                        {% for variation in skill_obj.variations_found[:3] %}
+                                        <span class="variation-tag" style="background: var(--primary-light); color: var(--primary-color); padding: 0.125rem 0.5rem; border-radius: var(--radius-sm); font-size: 0.75rem; margin-right: 0.25rem;">{{ variation }}</span>
+                                        {% endfor %}
+                                        {% if skill_obj.variations_found|length > 3 %}
+                                        <span style="font-size: 0.75rem; color: var(--text-secondary);">+{{ skill_obj.variations_found|length - 3 }} more</span>
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% if skill_obj.context %}
+                                    <div class="skill-context" style="font-size: 0.8rem; color: var(--text-secondary); font-style: italic; line-height: 1.4;">
+                                        "{{ skill_obj.context[:120] }}{% if skill_obj.context|length > 120 %}...{% endif %}"
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <div class="skill-method" style="margin-top: 0.5rem; font-size: 0.7rem; color: var(--text-tertiary);">
+                                        Detected via: {{ skill_obj.get('method', 'advanced_extraction').replace('_', ' ').title() }}
+                                    </div>
+                                </div>
                                 {% endfor %}
                             </div>
                         </div>
                         {% endif %}
                         {% endfor %}
                     </div>
+                    
+                    <!-- Skills Summary -->
+                    <div class="skills-summary" style="margin-top: 2rem; padding: 1.5rem; background: linear-gradient(135deg, var(--primary-light), var(--bg-secondary)); border-radius: var(--radius-lg);">
+                        <h4 style="color: var(--primary-color); margin-bottom: 1rem;">
+                            <i class='bx bx-chart-bar'></i> Skills Summary
+                        </h4>
+                        <div class="summary-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                            {% set high_confidence = results.skills.values() | list | sum(start=[]) | selectattr('confidence', 'ge', 0.8) | list | length %}
+                            {% set medium_confidence = results.skills.values() | list | sum(start=[]) | selectattr('confidence', 'ge', 0.6) | selectattr('confidence', 'lt', 0.8) | list | length %}
+                            {% set low_confidence = results.skills.values() | list | sum(start=[]) | selectattr('confidence', 'lt', 0.6) | list | length %}
+                            
+                            <div class="summary-item" style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--success-color);">{{ high_confidence }}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">High Confidence (80%+)</div>
+                            </div>
+                            <div class="summary-item" style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--warning-color);">{{ medium_confidence }}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">Medium Confidence (60-80%)</div>
+                            </div>
+                            <div class="summary-item" style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--info-color);">{{ low_confidence }}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">Needs Context (<60%)</div>
+                            </div>
+                            <div class="summary-item" style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary-color);">{{ results.advanced_insights.skill_categories|length }}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">Skill Categories</div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     {% else %}
                     <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
                         <i class='bx bx-info-circle' style="font-size: 2rem; margin-bottom: 1rem;"></i>
@@ -247,6 +589,60 @@
                         </div>
                         {% endfor %}
                     </div>
+                </div>
+                {% endif %}
+                
+                <!-- Performance Information -->
+                {% if results.processing_info %}
+                <div class="card" style="margin-top: 2rem; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
+                    <h3 style="color: var(--text-secondary); font-size: 1rem; margin-bottom: 1rem;">
+                        <i class='bx bx-info-circle'></i> Analysis Information
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; font-size: 0.875rem;">
+                        <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px; box-shadow: var(--shadow-sm);">
+                            <div style="font-weight: 600; color: var(--text-primary);">Analysis Mode</div>
+                            <div style="color: var(--primary-color); font-weight: 700; margin-top: 0.25rem;">
+                                {% if results.processing_info.analysis_mode == 'advanced' %}
+                                🎯 Advanced NLP
+                                {% else %}
+                                ⚡ Lightning Fast
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px; box-shadow: var(--shadow-sm);">
+                            <div style="font-weight: 600; color: var(--text-primary);">Processing Time</div>
+                            <div style="color: var(--secondary-color); font-weight: 700; margin-top: 0.25rem;">
+                                {{ "%.3f"|format(results.processing_info.total_time) }}s
+                            </div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px; box-shadow: var(--shadow-sm);">
+                            <div style="font-weight: 600; color: var(--text-primary);">Skills Found</div>
+                            <div style="color: var(--accent-color); font-weight: 700; margin-top: 0.25rem;">
+                                {{ results.advanced_insights.total_skills if results.advanced_insights else (results.skills.values() | list | length) }}
+                            </div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px; box-shadow: var(--shadow-sm);">
+                            <div style="font-weight: 600; color: var(--text-primary);">Entities Found</div>
+                            <div style="color: var(--warning-color); font-weight: 700; margin-top: 0.25rem;">
+                                {{ results.entities|length if results.entities else 0 }}
+                            </div>
+                        </div>
+                    </div>
+                    {% if results.processing_info.analysis_mode == 'advanced' %}
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(37, 99, 235, 0.05); border-radius: 8px; border-left: 4px solid var(--primary-color);">
+                        <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                            <strong>Advanced Analysis:</strong> Used spaCy, NLTK, Transformers, and Sentence Transformers for 
+                            comprehensive semantic analysis, entity recognition, sentiment analysis, and contextual skill extraction.
+                        </div>
+                    </div>
+                    {% else %}
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.05); border-radius: 8px; border-left: 4px solid var(--secondary-color);">
+                        <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                            <strong>Lightning Fast Analysis:</strong> Used optimized regex patterns and efficient algorithms 
+                            for instant results with minimal processing time.
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
                 {% endif %}
             </div>
