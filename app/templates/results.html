@@ -471,12 +471,6 @@
                                     </div>
                                     {% endif %}
                                     
-                                    {% if skill_obj.context %}
-                                    <div class="skill-context" style="font-size: 0.8rem; color: var(--text-secondary); font-style: italic; line-height: 1.4;">
-                                        "{{ skill_obj.context[:120] }}{% if skill_obj.context|length > 120 %}...{% endif %}"
-                                    </div>
-                                    {% endif %}
-                                    
                                     <div class="skill-method" style="margin-top: 0.5rem; font-size: 0.7rem; color: var(--text-tertiary);">
                                         Detected via: {{ skill_obj.get('method', 'advanced_extraction').replace('_', ' ').title() }}
                                     </div>

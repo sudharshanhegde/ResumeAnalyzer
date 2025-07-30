@@ -126,42 +126,125 @@ class AdvancedATSChecker:
         else:
             sentences = nltk.sent_tokenize(text)
         
+        # Define ambiguous/short skills that need context validation
+        ambiguous_skills = {
+            'r': ['programming', 'language', 'statistical', 'analytics', 'data', 'rstudio', 'cran'],
+            'c': ['programming', 'language', 'c++', 'coding', 'development', 'compiler'],
+            'go': ['golang', 'programming', 'language', 'google', 'backend', 'development'],
+            'ml': ['machine learning', 'artificial intelligence', 'ai', 'model', 'algorithm'],
+            'ai': ['artificial intelligence', 'machine learning', 'ml', 'neural', 'deep learning'],
+            'd': ['programming', 'language', 'dlang', 'systems']
+        }
+        
         # Extract skills with context
         for category, skills in self.skill_database.items():
             for skill in skills:
-                # Multiple pattern matching approaches
-                patterns = [
-                    rf'\b{re.escape(skill)}\b',
-                    rf'{re.escape(skill)}',
-                    rf'\b{re.escape(skill.replace(" ", ""))}\b',
-                    rf'\b{re.escape(skill.replace(".", ""))}\b'
-                ]
+                skill_lower = skill.lower()
                 
-                for pattern in patterns:
-                    matches = list(re.finditer(pattern, text_lower, re.IGNORECASE))
-                    if matches:
-                        # Find context for each match
-                        contexts = []
-                        for match in matches:
-                            start_pos = match.start()
-                            
-                            # Find which sentence contains this skill
-                            for sentence in sentences:
-                                if skill.lower() in sentence.lower():
-                                    contexts.append(sentence.strip())
-                                    break
+                # Check if this is an ambiguous skill that needs context validation
+                is_ambiguous = skill_lower in ambiguous_skills or len(skill_lower) <= 2
+                
+                # Use more precise patterns for short/ambiguous skills
+                if is_ambiguous:
+                    # For ambiguous skills, use exact word boundary and validate context
+                    pattern = rf'\b{re.escape(skill_lower)}\b'
+                    matches = list(re.finditer(pattern, text_lower))
+                    
+                    valid_contexts = []
+                    for match in matches:
+                        start_pos = match.start()
+                        end_pos = match.end()
                         
-                        if contexts:
-                            confidence = self._calculate_skill_confidence(skill, contexts, text_lower)
+                        # Get surrounding context (50 chars before and after)
+                        context_start = max(0, start_pos - 50)
+                        context_end = min(len(text_lower), end_pos + 50)
+                        surrounding_context = text_lower[context_start:context_end]
+                        
+                        # Find the sentence containing this match
+                        match_sentence = None
+                        for sentence in sentences:
+                            sentence_lower = sentence.lower()
+                            sentence_start = text_lower.find(sentence_lower)
+                            sentence_end = sentence_start + len(sentence_lower)
+                            if sentence_start <= start_pos < sentence_end:
+                                match_sentence = sentence.strip()
+                                break
+                        
+                        # Validate context for ambiguous skills
+                        if self._is_valid_skill_context(skill_lower, surrounding_context, match_sentence, ambiguous_skills):
+                            valid_contexts.append(match_sentence if match_sentence else surrounding_context)
+                    
+                    if valid_contexts:
+                        confidence = self._calculate_skill_confidence(skill, valid_contexts, text_lower)
+                        # Higher threshold for ambiguous skills
+                        if confidence >= 0.6:
                             skills_by_category[category].append({
                                 'skill': skill.title(),
                                 'confidence': confidence,
-                                'context': contexts[:2],  # Top 2 contexts
-                                'frequency': len(matches)
+                                'context': valid_contexts[:2],
+                                'frequency': len(valid_contexts)
                             })
-                        break  # Found with this pattern, don't try others
+                else:
+                    # For clear, unambiguous skills, use the original approach
+                    patterns = [
+                        rf'\b{re.escape(skill_lower)}\b',
+                        rf'\b{re.escape(skill_lower.replace(" ", ""))}\b',
+                        rf'\b{re.escape(skill_lower.replace(".", ""))}\b'
+                    ]
+                    
+                    for pattern in patterns:
+                        matches = list(re.finditer(pattern, text_lower))
+                        if matches:
+                            contexts = []
+                            for sentence in sentences:
+                                if skill_lower in sentence.lower():
+                                    contexts.append(sentence.strip())
+                            
+                            if contexts:
+                                confidence = self._calculate_skill_confidence(skill, contexts, text_lower)
+                                skills_by_category[category].append({
+                                    'skill': skill.title(),
+                                    'confidence': confidence,
+                                    'context': contexts[:2],
+                                    'frequency': len(matches)
+                                })
+                            break
         
         return dict(skills_by_category)
+
+    def _is_valid_skill_context(self, skill_lower, surrounding_context, sentence_context, ambiguous_skills):
+        """Validate if the skill mention is in a proper technical context"""
+        if skill_lower not in ambiguous_skills:
+            return True
+        
+        # Check both surrounding context and sentence context
+        contexts_to_check = [surrounding_context]
+        if sentence_context:
+            contexts_to_check.append(sentence_context.lower())
+        
+        required_keywords = ambiguous_skills[skill_lower]
+        
+        for context in contexts_to_check:
+            if context:
+                # Check if any of the required keywords are present
+                if any(keyword in context for keyword in required_keywords):
+                    return True
+                
+                # Additional context checks for specific skills
+                if skill_lower == 'r':
+                    # Check for R programming specific patterns
+                    if any(pattern in context for pattern in ['r studio', 'r programming', 'r language', 'cran', 'tidyverse', 'ggplot']):
+                        return True
+                elif skill_lower == 'c':
+                    # Check for C programming specific patterns
+                    if any(pattern in context for pattern in ['c programming', 'c language', 'c++', 'gcc', 'coding in c']):
+                        return True
+                elif skill_lower == 'go':
+                    # Check for Go programming specific patterns
+                    if any(pattern in context for pattern in ['golang', 'go programming', 'go language', 'google go']):
+                        return True
+        
+        return False
 
     def _calculate_skill_confidence(self, skill, contexts, full_text):
         """Calculate confidence score for a skill based on context"""
