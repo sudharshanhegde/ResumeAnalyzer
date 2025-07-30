@@ -1,199 +1,68 @@
-# Advanced NLP Resume Analyzer
+# Resume Analyzer
 
-An intelligent resume analysis tool powered by cutting-edge Natural Language Processing (NLP) techniques.
+An intelligent ATS (Applicant Tracking System) resume analysis tool that provides accurate skill matching and comprehensive feedback using advanced Natural Language Processing.
 
-## 🚀 Quick Start (Super Easy!)
+## Quick Start
 
-### **Just Double-Click and Go!**
+1. Run `setup.bat` to install dependencies
+2. Run `run.bat` to start the application
+3. Open your browser to `http://localhost:5001`
+4. Upload your resume (PDF format) and job description
+5. Get detailed analysis and improvement suggestions
 
-1. **Desktop Shortcut**: Double-click "Resume Analyzer" on your desktop
-2. **Quick Start**: Double-click `quick_start.bat`
-3. **Interactive Menu**: Double-click `easy_launcher.bat`
+## Features
 
-**That's it!** The application will start automatically and open in your browser at `http://localhost:5001`
+### Core Functionality
 
-## 🎯 Advanced NLP Features
+- PDF resume text extraction
+- Advanced skill detection with context validation
+- Job description matching with ATS-style scoring
+- Missing skills identification
+- Professional improvement suggestions
+- Resume editor with PDF export
 
-### Multi-Model Named Entity Recognition (NER)
+### Advanced Analysis
 
-- **spaCy NER**: Industrial-strength entity extraction for persons, organizations, locations, dates, and more
-- **Transformer-based NER**: BERT-based models for high-accuracy entity recognition
-- **NLTK NER**: Traditional linguistic approach for comprehensive coverage
-- **Enhanced Regex Patterns**: Custom patterns for emails, phones, degrees, GPAs, and URLs
+- Named Entity Recognition (contact info, dates, organizations)
+- Semantic similarity analysis between resume and job description
+- Text readability assessment
+- Sentiment analysis
+- Multiple confidence scoring algorithms
+- Category-based skill organization
 
-### Advanced Skills Extraction
+### Technical Capabilities
 
-- **Categorized Skills Database**: Organized by programming languages, web technologies, databases, cloud platforms, AI/ML, and tools
-- **Multiple Detection Methods**:
-  - Exact string matching with confidence scoring
-  - TF-IDF similarity analysis
-  - spaCy semantic similarity
-  - Context-aware skill identification
+- False positive prevention for ambiguous skills (e.g., 'R', 'Go', 'C')
+- Context-aware pattern matching
+- Multiple NLP model support (spaCy, NLTK, Transformers)
+- Comprehensive skill database with 500+ technical skills
+- ATS optimization recommendations
 
-### Semantic Analysis
+## Installation
 
-- **Semantic Similarity**: Deep learning-based comparison between resume and job description using sentence transformers
-- **Content Alignment**: Measures how well your resume matches the job requirements beyond simple keyword matching
+### Requirements
 
-### Text Analytics
+- Python 3.7+
+- Windows OS (for batch files)
 
-- **Readability Analysis**: Multiple readability metrics including Flesch Reading Ease, Gunning Fog Index, and more
-- **Sentiment Analysis**: AI-powered sentiment detection using transformer models
-- **Text Statistics**: Comprehensive analysis of word count, sentence structure, and content complexity
+### Setup Process
 
-### Intelligent Suggestions Engine
+1. Clone or download the repository
+2. Run `setup.bat` - this will:
+   - Create virtual environment
+   - Install required packages
+   - Download necessary NLP models
+3. Use `run.bat` to start the application
 
-- **Priority-based Recommendations**: High, medium, and low priority suggestions with impact analysis
-- **Contextual Advice**: Suggestions based on semantic similarity, readability scores, and sentiment analysis
-- **ATS Optimization**: Specific recommendations for Applicant Tracking System compatibility
-
-## 🛠️ Setup and Installation
-
-### **First Time Setup**
-
-1. **Run the clean installer:**
-
-   ```bash
-   setup_clean_nlp.bat
-   ```
-
-2. **Create desktop shortcut:**
-
-   ```bash
-   create_shortcut.ps1
-   ```
-
-3. **Start using the application:**
-   - Double-click desktop shortcut, OR
-   - Double-click `quick_start.bat`
-
-### **If You Need Help**
-
-- Run `diagnose_nlp.py` for troubleshooting
-- Check `EASY_ACCESS_GUIDE.md` for detailed instructions
-- Use `easy_launcher.bat` for interactive menu
-
-## 🏗️ Project Structure
-
-```
-resume-analyzer/
-├── app/
-│   ├── static/
-│   │   ├── css/
-│   │   │   └── modern.css          # Professional UI styling
-│   │   ├── js/
-│   │   └── uploads/                # Resume upload directory
-│   │       └── .gitkeep           # Keep directory in git
-│   └── templates/
-│       ├── index.html              # Main upload page
-│       ├── results.html            # Analysis results page
-│       └── editor.html             # Resume editor page
-├── nlp_resume_env/                 # Virtual environment (ignored)
-├── app.py                          # Main Flask application
-├── requirements_nlp.txt            # Complete NLP dependencies
-├── requirements.txt                # Basic dependencies
-├── diagnose_nlp.py                 # Diagnostic and troubleshooting tool
-├── setup_clean_nlp.bat            # Clean installation script
-├── quick_start.bat                 # Easy launcher (recommended)
-├── easy_launcher.bat               # Interactive menu launcher
-├── start_analyzer.bat              # Application starter
-├── stop_analyzer.bat               # Application stopper
-├── check_status.bat                # Status checker
-├── EASY_ACCESS_GUIDE.md            # User guide for easy access
-├── LAUNCH_GUIDE.md                 # Detailed launch instructions
-├── .gitignore                      # Git ignore file
-└── README.md                       # This file
-```
-
-## 🚀 Usage
-
-### **Easy Method (Recommended)**
-
-1. **Double-click** `quick_start.bat` or the desktop shortcut
-2. **Wait** for the browser to open automatically
-3. **Upload** your resume (PDF format)
-4. **Paste** a job description (optional but recommended)
-5. **Click** "Analyze My Resume"
-6. **Get** comprehensive AI-powered analysis!
-
-### **Advanced Method**
-
-1. **Double-click** `easy_launcher.bat`
-2. **Choose** from the interactive menu:
-   - [1] Quick Start (recommended)
-   - [2] Open Application (if already running)
-   - [3] Stop Application
-   - [4] Check Status
-   - [5] Run Diagnostics
-
-### **Manual Method**
+### Manual Installation
 
 ```bash
-# Activate virtual environment
-nlp_resume_env\Scripts\activate.bat
-
-# Run the application
+python -m venv venv311
+venv311\Scripts\activate
+pip install -r requirements.txt
+python -m spacy download en_core_web_sm
 python app.py
 ```
-
-## 🔧 Troubleshooting
-
-### **Application won't start?**
-
-1. Run `easy_launcher.bat` → Choose [5] Run Diagnostics
-2. Check the output for any missing dependencies
-3. If needed, run `setup_clean_nlp.bat` for fresh installation
-
-### **Models not downloading?**
-
-1. Check your internet connection
-2. Run `diagnose_nlp.py` to verify installation
-3. Models are downloaded on first run (may take a few minutes)
-
-### **Port already in use?**
-
-1. Run `easy_launcher.bat` → Choose [3] Stop Application
-2. Or restart your computer
-3. Try starting again
-
-### **Performance issues?**
-
-1. First run downloads large AI models (be patient)
-2. Subsequent runs will be much faster
-3. Close other applications to free up memory
-
-### 🚀 **Running the Application**
-
-After successful setup:
-
-```bash
-run_nlp.bat
-```
-
-Or manually:
-
-```bash
-nlp_resume_env\Scripts\activate.bat
-python app.py
-```
-
-Open your browser and navigate to `http://localhost:5001`
-
-4. Open your browser and navigate to `http://localhost:5001`
-
-### Cleaning Up
-
-If you have multiple virtual environments in your project folder (venv, venv_simple, etc.),
-you can safely delete them after closing all python processes:
-
-```bash
-# First make sure all Python processes are closed
-# Then delete the virtual environment folders manually
-# Or use this command if you have permission:
-Remove-Item -Recurse -Force venv, venv_simple, ui_venv, direct_venv, simple_venv
-```
-
-Only the `venv` folder created by `setup.bat` is needed for the application to run.
 
 ## Project Structure
 
@@ -202,174 +71,126 @@ resume-analyzer/
 ├── app/
 │   ├── static/
 │   │   ├── css/
-│   │   │   └── modern.css
+│   │   │   ├── modern.css
+│   │   │   └── style.css
 │   │   ├── js/
-│   │   └── uploads/
+│   │   └── uploads/              # Resume storage
 │   └── templates/
-│       ├── index.html
-│       └── results.html
-├── app.py
-├── requirements.txt
-├── run.bat
-└── README.md
+│       ├── index.html            # Upload interface
+│       ├── results.html          # Analysis results
+│       └── editor.html           # Resume editor
+├── venv311/                      # Virtual environment
+├── app.py                        # Main Flask application
+├── advanced_skills_extractor.py  # Core ATS analysis engine
+├── lightning_extractor.py        # Fast extraction mode
+├── requirements.txt              # Python dependencies
+├── setup.bat                     # Installation script
+├── run.bat                       # Application launcher
+└── README.md                     # This file
 ```
+
+## Usage
+
+### Basic Analysis
+
+1. Upload PDF resume
+2. Optionally paste job description
+3. Click "Analyze My Resume"
+4. Review match percentage and detected skills
+5. Follow improvement suggestions
+
+### Advanced Features
+
+- Edit resume text directly in browser
+- Export edited resume as PDF
+- View detailed skill categories
+- Check entity recognition results
+- Access readability and sentiment analysis
 
 ## Technology Stack
 
-- **Backend**: Flask (Python)
-- **PDF Processing**: PyPDF2
-- **Frontend**: HTML, CSS (with modern design system)
-- **Icons**: Boxicons
+- **Backend**: Flask (Python web framework)
+- **NLP Libraries**: spaCy, NLTK, scikit-learn, Transformers
+- **PDF Processing**: PyPDF2, ReportLab
+- **Frontend**: HTML5, CSS3, JavaScript
+- **UI Components**: Boxicons, custom CSS framework
 
-## How It Works
+## Analysis Capabilities
 
-1. **Upload Your Resume**:
+### Skill Detection
 
-   - Submit your resume in PDF format
-   - The system extracts text content using PyPDF2
+- Programming languages, frameworks, tools
+- Database technologies
+- Cloud platforms and DevOps tools
+- AI/ML technologies
+- Soft skills and certifications
 
-2. **Analyze Job Description (Optional)**:
+### Pattern Matching
 
-   - Paste a job description to compare with your resume
-   - The analyzer extracts key skills from both
+- Context-aware skill validation
+- False positive prevention
+- Multiple confidence scoring methods
+- Industry-specific terminology recognition
 
-3. **Get Comprehensive Analysis**:
+### Job Matching
 
-   - See detected skills in your resume
-   - Identify missing skills based on the job description
-   - View match percentage with visual indicators
-   - Receive detailed improvement suggestions
+- ATS-style scoring algorithm
+- Semantic similarity analysis
+- Missing skills identification
+- Category-based comparison
+- Improvement prioritization
 
-4. **Edit and Improve Your Resume**:
-   - Edit your resume text directly in the browser
-   - Follow the personalized suggestions to improve your resume
-   - Save changes and download the updated PDF
+## Configuration
 
-## Future Enhancements
+The application uses forced advanced mode for optimal accuracy:
 
-- Improved keyword extraction algorithms
-- Grammar check functionality
-- Export analysis report as PDF
-- User accounts to save previous analyses
-- Advanced visualization of skill matches
+- Advanced NLP analysis (5-15 seconds processing)
+- Context validation for ambiguous skills
+- Comprehensive entity recognition
+- Semantic similarity scoring
 
-## Screenshots
+## Troubleshooting
 
-The application features a modern, clean UI with:
+### Common Issues
 
-- Card-based layout
-- Progress indicators
-- Color-coded skill tags
-- Responsive design for all devices
+- **Port 5001 in use**: Change port in app.py or stop other applications
+- **PDF not reading**: Ensure PDF contains selectable text, not scanned images
+- **Missing models**: Run `python -m spacy download en_core_web_sm`
+- **Performance issues**: Close other applications, ensure adequate RAM
+
+### Debug Mode
+
+- Application runs in debug mode by default
+- Check console output for detailed error messages
+- Verify virtual environment activation
+
+## File Management
+
+### Safe to Delete
+
+Based on .gitignore configuration, these files can be safely removed:
+
+- Redundant launcher scripts (keep only run.bat, setup.bat)
+- Test and demo files
+- Extra documentation files
+- Alternative extractor files
+- Development virtual environments (ui_venv, etc.)
+
+### Core Files (Keep)
+
+- app.py
+- advanced_skills_extractor.py
+- lightning_extractor.py
+- app/ directory (templates, static files)
+- requirements.txt
+- setup.bat, run.bat
 
 ## License
 
-MIT
+MIT License - see LICENSE file for details.
 
-## 🧠 NLP Techniques Explained
+## Version Information
 
-### 1. Named Entity Recognition (NER)
-
-Multiple approaches ensure comprehensive entity extraction:
-
-- **Statistical Models**: spaCy's CNN-based models for fast, accurate entity recognition
-- **Transformer Models**: BERT-based models for state-of-the-art accuracy
-- **Rule-based Systems**: NLTK's linguistic patterns for broad coverage
-- **Custom Patterns**: Specialized regex for resume-specific entities
-
-### 2. Semantic Similarity
-
-Goes beyond keyword matching:
-
-- **Sentence Transformers**: Creates dense vector representations of text
-- **Cosine Similarity**: Measures semantic distance between resume and job description
-- **Contextual Understanding**: Identifies related concepts even with different wording
-
-### 3. Text Analytics
-
-Comprehensive text quality assessment:
-
-## 🔬 Technical Details
-
-### **Core NLP Technologies**
-
-1. **spaCy**: Industrial-strength NLP with English language models
-2. **Transformers**: Hugging Face library for BERT-based sentiment analysis
-3. **Sentence Transformers**: Semantic similarity using sentence-BERT
-4. **NLTK**: Traditional NLP toolkit for tokenization and analysis
-5. **scikit-learn**: TF-IDF vectorization and machine learning
-6. **TextStat**: Comprehensive readability analysis
-
-### **AI Models Used**
-
-- **spaCy en_core_web_sm**: Named entity recognition and POS tagging
-- **cardiffnlp/twitter-roberta-base-sentiment**: Sentiment analysis
-- **all-MiniLM-L6-v2**: Sentence embeddings for semantic similarity
-- **TF-IDF**: Term frequency analysis for keyword matching
-
-### **Analysis Capabilities**
-
-- **Entity Recognition**: Persons, organizations, locations, dates, emails, phones
-- **Skill Categorization**: 500+ technical skills across 15+ categories
-- **Semantic Similarity**: Deep learning-based content comparison
-- **Readability Analysis**: Multiple linguistic complexity metrics
-- **Sentiment Analysis**: Professional tone and confidence assessment
-
-## 🎯 Benefits
-
-### **For Job Seekers**
-
-- **Higher Accuracy**: Multiple NLP models ensure comprehensive analysis
-- **Semantic Understanding**: Matches concepts, not just keywords
-- **Intelligent Feedback**: AI-powered suggestions with priority ranking
-- **ATS Optimization**: Ensures compatibility with automated screening systems
-
-### **For Recruiters**
-
-- **Deeper Insights**: Understanding beyond surface-level keyword matching
-- **Quality Assessment**: Readability and sentiment analysis of candidate materials
-- **Semantic Matching**: Find candidates with related skills and experience
-
-## 📝 Example Analysis Output
-
-### **Match Score**: 87% (Excellent match!)
-
-### **Sentiment**: Positive (89% confidence)
-
-### **Readability**: Grade 12.3 (Professional level)
-
-### **Skills Found**: 23 technical skills across 8 categories
-
-### **Entities**: 15 organizations, 8 locations, 12 dates
-
-### **Suggestions**: 5 high-priority improvements
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🆕 Version 2.0 - Advanced NLP Edition
-
-**Latest Features:**
-
-- Complete NLP pipeline with multiple AI models
-- Professional modern UI with enhanced analytics
-- Easy launcher system with desktop shortcuts
-- Comprehensive diagnostic and troubleshooting tools
-- Clean project structure with proper `.gitignore`
-
----
-
-**Created with ❤️ by AI-Powered Resume Analysis System**  
-**Version**: 2.0 (Advanced NLP Edition)  
-**Last Updated**: July 2025
-
-_Powered by state-of-the-art NLP models from spaCy, Hugging Face Transformers, and NLTK_
+Current Version: Advanced ATS Checker with Context Validation
+Last Updated: July 2025
+Python Compatibility: 3.7+
